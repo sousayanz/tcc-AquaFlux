@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <noscript>
+     <style>
+     body { display: none; }
+     </style>
+     <meta http-equiv="refresh" content="0;url=/index.html">
+  </noscript>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaFlux - Login</title>
+  <link rel="stylesheet" href="css/login.css"> <!-- Link para o CSS de login -->
+  <link rel="icon" type="image/x-icon" href="img/logo.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Alice&family=Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+   <script>
+// Coloque em um arquivo js comum, ex: transition.js, e chame em todas as páginas
+
+function showWaveTransition(reverse, callback) {
+  const el = document.getElementById('waveTransition');
+  el.style.display = 'block';
+  el.classList.remove('show','reverse');
+  setTimeout(() => {
+    el.classList.add(reverse ? 'reverse' : 'show');
+    setTimeout(() => { callback && callback(); }, 780);
+  }, 10);
+}
+
+document.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', e => {
+    if (link.target === '_blank' || !link.href || link.href[0] === '#') return;
+    e.preventDefault();
+    // Decide direção: se indo para login.html, use 'reverse', se indo para cadastro.html, use 'show'
+    const reverse = link.href.includes('login.html');
+    showWaveTransition(reverse, () => window.location.href = link.href);
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('visible');
+});
+
+
+</script>
+
+
+   <!-- Container principal que divide a tela em duas partes -->
+  <div class="login-wrapper">
+
+  <!-- Lado azul com ondas a ESQUERDA -->
+  <div class="project-side">
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+      <path fill="#1a3d7c" fill-opacity="0.5" d="M0,64L80,74.7C160,85,320,107,480,106.7C640,107,800,85,960,90.7C1120,96,1280,128,1360,144L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+      <path fill="#4091f7" fill-opacity="0.5" d="M0,224L80,197.3C160,171,320,117,480,122.7C640,128,800,192,960,181.3C1120,171,1280,85,1360,42.7L1440,0L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+    </svg>
+  </div>
+
+  <!-- Lado do formulário de login a DIREITA -->
+  <div class="form-side">
+    <!-- Conteúdo do formulário -->
+    <div class="container">
+      <!-- Botão sair -->
+      <button class="btn-sair" aria-label="Fechar cadastro">×</button>
+
+         <!-- Script para redirecionar ao clicar no botão de sair para index.html -->
+      <script>
+        document.querySelector('.btn-sair').addEventListener('click', () => {
+          window.location.href = 'index.html'; // redireciona para a página inicial
+        });
+      </script>
+
+      <div class="logo">
+        <img class="FotoLogo" src="img/Aquaflux.png" alt="Logo AquaFlux" />
+        <h1>AQUAFLUX</h1>
+        <h2>Bem-vindo de volta!</h2>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <input type="text" id="usuario" maxlength="18" placeholder="Digite seu CPF, CNPJ" required />
+        </div>
+        <div class="form-group">
+          <input type="password" id="senha" placeholder="Digite sua senha" required />
+        </div>
+        <button type="submit" class="btn-primary" id="submitBtn">Entrar</button>
+      </form>
+
+      <div id="msg"></div>
+
+      <div class="forgot-password">
+        <a href="#" id="forgotPasswordLink">Esqueci minha senha</a>
+      </div>
+
+      <div class="login-link"> 
+        <p>
+          <a class="cad">Não possui um cadastro?</a><br>
+           <a href="cadastro.html">Criar Conta</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="wave-transition" id="waveTransition">
+  <svg class="transition-waves" viewBox="0 0 1440 320" preserveAspectRatio="none">
+    <path fill="#1976d2" fill-opacity="0.7"
+      d="M0,160 Q480,280 960,160 T1440,160 V320 H0 Z"/>
+    <path fill="#4091f7" fill-opacity="0.4"
+      d="M0,250 Q400,180 1000,250 T1440,220 V320 H0 Z"/>
+  </svg>
+</div>
+  <!-- MODAL DE RECUPERAÇÃO DE SENHA -->
+<div class="modal-overlay-reset" id="resetPasswordModal">
+  <div class="modal-content-reset">
+      <button class="modal-close-reset" id="closeModal">&times;</button>
+      
+      <div class="modal-header-reset">
+          <h3>Recuperar Senha</h3>
+          <p>Digite seu e-mail cadastrado para receber o link de recuperação</p>
+      </div>
+
+      <form id="resetPasswordForm">
+          <div class="form-group">
+              <input type="email" id="resetEmail" placeholder="seuemail@exemplo.com" required>
+          </div>
+
+          <button type="submit" class="btn-reset" id="resetBtn">
+              Enviar Link de Recuperação
+          </button>
+
+          <div id="resetMsg"></div>
+      </form>
+
+      <!-- INSTRUÇÕES -->
+      <div class="instructions-reset" id="instructions">
+          <h4>✓ E-mail enviado com sucesso!</h4>
+          <ol>
+              <li><strong>Verifique sua caixa de entrada</strong> do e-mail cadastrado</li>
+              <li>Caso não encontre, <strong>verifique a pasta de SPAM</strong> ou lixo eletrônico</li>
+              <li>Abra o e-mail com o título <strong>"Redefinição de senha"</strong></li>
+              <li>Clique no link <strong>"Redefinir senha"</strong> dentro do e-mail</li>
+              <li>Você será redirecionado para criar uma <strong>nova senha segura</strong></li>
+              <li>Após redefinir, volte à tela de login e entre com a nova senha</li>
+          </ol>
+
+          <div class="important-note-reset">
+              <strong>⚠ Importante:</strong> O link expira em 1 hora. Se não receber o e-mail, tente novamente.
+          </div>
+      </div>
+  </div>
+</div>
+
+<style>
+/* CSS APENAS PARA O MODAL DE RECUPERAÇÃO */
+.modal-overlay-reset {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay-reset.active {
+  display: flex;
+}
+
+.modal-content-reset {
+  background: white;
+  border-radius: 15px;
+  padding: 35px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-close-reset {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #999;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  line-height: 1;
+}
+
+.modal-close-reset:hover {
+  color: #333;
+}
+
+.modal-header-reset {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.modal-header-reset h3 {
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.modal-header-reset p {
+  color: #666;
+  font-size: 14px;
+}
+
+.modal-content-reset .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-content-reset input[type="email"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modal-content-reset input[type="email"]:focus {
+  border-color: #4091f7;
+  outline: none;
+}
+
+.btn-reset {
+  width: 100%;
+  padding: 12px;
+  background: #4091f7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-reset:hover {
+  background: #1976d2;
+}
+
+.btn-reset:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#resetMsg {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+}
+
+#resetMsg .msg-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+#resetMsg .msg-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.instructions-reset {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  display: none;
+}
+
+.instructions-reset.show {
+  display: block;
+}
+
+.instructions-reset h4 {
+  color: #28a745;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.instructions-reset ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.instructions-reset li {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.important-note-reset {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #856404;
+}
+</style>
+
+  <script type="module" src="javascript/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carregando...</title>
+      <link rel="icon" type="image/x-icon" href="img/logo.ico">
+  
+  <!-- Script Lottie para animações -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.9/lottie.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Grammade&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Usando flexbox para centralizar o conteúdo */
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: #fff; /* Fundo branco */
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      overflow: hidden;
+    }
+
+    /* Estilo para a mensagem de loading */
+    #loading-message {
+      font-family: "Inter", sans-serif;
+      font-size: 1.3rem;
+      color: #63b1ef; /* Cor azul */
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      margin-top: 20px;
+      opacity: 1; /* Começa visível */
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Configurando o tamanho da animação Lottie */
+    #lottie-animation {
+      width: 150px;
+      height: 150px;
+      opacity: 0; /* Começa invisível */
+      transition: opacity 1s ease-in; /* Fade-in suave */
+    }
+
+    /* Responsividade: Ajuste de tamanho para telas menores */
+    @media (max-width: 768px) {
+      #lottie-animation {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #lottie-animation {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Container para a animação Lottie -->
+  <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
+  <dotlottie-wc src="https://lottie.host/75772edc-6e3c-4b86-b555-23f3a3ed0cda/z7k6xYIg8A.lottie" style="width: 300px;height: 300px" autoplay loop id="lottie-animation"></dotlottie-wc>
+  
+  <!-- Mensagem de Loading -->
+  <div id="loading-message">Carregando</div>
+
+  <!-- Script para animar a mensagem de "Carregando" com bolinhas -->
+    <script>
+    const loadingMessage = document.getElementById('loading-message');
+    const animation = document.getElementById('lottie-animation');
+
+    let dotCount = 0;
+    let loadingInterval;
+
+    // Função para animar os pontos da mensagem de "Carregando"
+    function animateLoadingMessage() {
+      dotCount++;
+      if (dotCount > 3) dotCount = 0; // Resetar após 3 pontos
+
+      // Atualizar a mensagem com os pontos
+      loadingMessage.textContent = 'Carregando' + '.'.repeat(dotCount);
+    }
+
+    // Iniciar a animação dos pontos a cada 500ms
+    loadingInterval = setInterval(animateLoadingMessage, 500);
+
+    // Função para esconder a mensagem de "loading" após a animação ser carregada
+    function hideLoadingMessage() {
+      clearInterval(loadingInterval); // Parar a animação dos pontos
+      loadingMessage.style.opacity = 0; // Fade out a mensagem de loading
+
+      // Obter o parâmetro da URL (se for "login" ou "cadastro")
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectPage = urlParams.get('redirect'); // Obtém o valor do parâmetro 'redirect'
+
+      // Redirecionar para a página com base no parâmetro 'redirect'
+      setTimeout(() => {
+        if (redirectPage === 'login') {
+          window.location.href = "login.html";  // Redireciona para a página de login
+        } else if (redirectPage === 'cadastro') {
+          window.location.href = "cadastro.html";  // Redireciona para a página de cadastro
+        }
+        
+      }, 1000); // Espera 1 segundo após a animação de carregamento
+    }
+
+    // Garantir que a animação tenha tempo para ser exibida antes de redirecionar
+    setTimeout(hideLoadingMessage, 3000); // 3 segundos de espera antes de redirecionar
+
+    // Fade-in para a animação Lottie e a mensagem "Carregando"
+    window.onload = () => {
+      animation.style.opacity = 1; // A animação Lottie aparece com fade-in
+      loadingMessage.style.opacity = 1; // A mensagem "Carregando" aparece com fade-in
+    }
+  </script>
+
+
+</body>
+
+</html>

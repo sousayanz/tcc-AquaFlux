@@ -1,0 +1,571 @@
+#include <ESP8266WiFi.h>
+#include <FirebaseESP8266.h>
+#include <WiFiManager.h>
+#include <ArduinoJson.h>
+#include <NTPClient.h>
+#include <WiFiUdp.h>
+
+// ============================================================
+#define FIREBASE_HOST "aqua-flux-default-rtdb.firebaseio.com"
+#define FIREBASE_AUTH "AIzaSyBycnpeGWw-ecRDXLxdOr_NAMhfQzLWwp4"
+
+const String ARDUINO_ID = "ESP_001";
+const int RELAY_PIN = 2;
+const int LED_PIN = 16;
+
+// ============================================================
+FirebaseData firebaseData;
+FirebaseConfig config;
+FirebaseAuth auth;
+
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", -3 * 3600, 60000);
+
+bool relayState = false;
+bool lastRelayState = false;
+bool firebaseReady = false;
+
+unsigned long relayOnTime = 0;
+String currentUserId = "";
+String deviceFirebaseId = "";
+
+String lastChangeType = "manual";
+bool hasActiveSchedule = false;
+bool scheduleRelayState = false;
+
+unsigned long lastUpdate = 0;
+unsigned long lastHeartbeat = 0;
+unsigned long lastScheduleCheck = 0;
+
+const unsigned long UPDATE_INTERVAL = 500;
+const unsigned long HEARTBEAT_INTERVAL = 5000;
+const unsigned long SCHEDULE_CHECK_INTERVAL = 10000;
+
+// NOVAS FLAGS PARA INICIALIZAÇÃO ASSÍNCRONA
+bool initialSetupDone = false;
+unsigned long setupStartTime = 0;
+int setupStep = 0;
+
+// ============================================================
+String formatDuration(unsigned long ms) {
+  unsigned long totalSeconds = ms / 1000;
+  unsigned int milliseconds = ms % 1000;
+  unsigned int seconds = totalSeconds % 60;
+  unsigned long totalMinutes = totalSeconds / 60;
+  unsigned int minutes = totalMinutes % 60;
+  unsigned long hours = totalMinutes / 60;
+
+  char buffer[16];
+  snprintf(buffer, sizeof(buffer), "%02lu:%02u:%02u.%03u",
+           hours, minutes, seconds, milliseconds);
+  return String(buffer);
+}
+
+String getFormattedDate() {
+  time_t epochTime = timeClient.getEpochTime();
+  struct tm *ptm = gmtime((time_t *)&epochTime);
+  return String(ptm->tm_mday) + "/" + String(ptm->tm_mon + 1) + "/" + String(ptm->tm_year + 1900);
+}
+
+String getFormattedTime() {
+  return timeClient.getFormattedTime();
+}
+
+// ============================================================
+void findDeviceFirebaseId() {
+  if (currentUserId == "" || !firebaseReady) {
+    Serial.println("⚠️  Não pode buscar deviceId: userId ou Firebase não pronto");
+    return;
+  }
+
+  Serial.println("🔍 Buscando Device Firebase ID...");
+  String devicesPath = "users/" + currentUserId + "/devices";
+
+  yield();
+
+  if (!Firebase.getJSON(firebaseData, devicesPath)) {
+    Serial.println("❌ Erro ao ler devices");
+    return;
+  }
+
+  String payload = firebaseData.payload();
+  if (payload == "null") {
+    Serial.println("❌ Devices vazio");
+    return;
+  }
+
+  int pos = 0;
+  int count = 0;
+  while (true) {
+    if (count++ % 3 == 0) yield();
+
+    pos = payload.indexOf("\"-", pos);
+    if (pos == -1) break;
+
+    int endPos = payload.indexOf("\"", pos + 1);
+    if (endPos == -1) break;
+
+    String deviceId = payload.substring(pos + 1, endPos);
+    pos = endPos;
+
+    yield();
+
+    String arduinoidPath = devicesPath + "/" + deviceId + "/arduinoid";
+    if (Firebase.getString(firebaseData, arduinoidPath)) {
+      String arduinoid = firebaseData.stringData();
+      Serial.println("  Device " + deviceId + " -> arduinoid: " + arduinoid);
+
+      if (arduinoid == ARDUINO_ID) {
+        deviceFirebaseId = deviceId;
+        Serial.println("✅ Device Firebase ID encontrado: " + deviceFirebaseId);
+        return;
+      }
+    }
+  }
+
+  Serial.println("❌ Device com arduinoid=" + ARDUINO_ID + " não encontrado");
+}
+
+// ============================================================
+void setup() {
+  Serial.begin(115200);
+  delay(100);
+  Serial.println("\n\n===== AQUAFLUX v3.9 FIXED =====");
+
+  system_update_cpu_freq(160);
+
+  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
+  digitalWrite(LED_PIN, HIGH);
+
+  connectToWiFi();
+  yield();
+
+  timeClient.begin();
+  yield();
+
+  setupStartTime = millis();
+
+  Serial.println("✅ Setup básico completo");
+  Serial.println("🔄 Inicialização completa será feita no loop...\n");
+}
+
+// ============================================================
+void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    digitalWrite(LED_PIN, HIGH);
+    connectToWiFi();
+    return;
+  }
+
+  unsigned long now = millis();
+  timeClient.update();
+
+  if (!initialSetupDone) {
+    performAsyncSetup();
+    return;
+  }
+
+  if (now - lastUpdate >= UPDATE_INTERVAL) {
+    checkCommands();
+    lastUpdate = now;
+  }
+
+  if (now - lastScheduleCheck >= SCHEDULE_CHECK_INTERVAL) {
+    updateScheduleState();
+    lastScheduleCheck = now;
+  }
+
+  if (now - lastHeartbeat >= HEARTBEAT_INTERVAL) {
+    sendHeartbeat();
+    lastHeartbeat = now;
+  }
+
+  controlRelay();
+  yield();
+}
+
+// ============================================================
+void performAsyncSetup() {
+  unsigned long now = millis();
+
+  if (now - setupStartTime > 30000) {
+    Serial.println("⚠️  Timeout na etapa " + String(setupStep) + ", pulando...");
+    setupStep++;
+    setupStartTime = now;
+  }
+
+  switch(setupStep) {
+    case 0: {
+      Serial.println("🔥 Etapa 1: Configurando Firebase...");
+      setupFirebase();
+      yield();
+      setupStep++;
+      setupStartTime = now;
+      break;
+    }
+
+    case 1: {
+      if (firebaseReady) {
+        Serial.println("📝 Etapa 2: Registrando device...");
+        registerDevice();
+        yield();
+        setupStep++;
+        setupStartTime = now;
+      }
+      break;
+    }
+
+    case 2: {
+      Serial.println("👤 Etapa 3: Buscando userId...");
+      yield();
+      String controlledByPath = "arduinos/" + ARDUINO_ID + "/controlledBy";
+      if (Firebase.getString(firebaseData, controlledByPath)) {
+        String tempUserId = firebaseData.stringData();
+        if (tempUserId != "" && tempUserId != "null") {
+          currentUserId = tempUserId;
+          Serial.println("✅ UserId: " + currentUserId);
+        } else {
+          Serial.println("⚠️  ESP não vinculado a usuário");
+        }
+      }
+      yield();
+      setupStep++;
+      setupStartTime = now;
+      break;
+    }
+
+    case 3: {
+      if (currentUserId != "") {
+        Serial.println("📱 Etapa 4: Buscando deviceId...");
+        findDeviceFirebaseId();
+        yield();
+      }
+      setupStep++;
+      setupStartTime = now;
+      break;
+    }
+
+    case 4: {
+      Serial.println("\n✅ ========== SISTEMA PRONTO ==========\n");
+      digitalWrite(LED_PIN, LOW);
+      initialSetupDone = true;
+      break;
+    }
+  }
+
+  yield();
+}
+
+// ============================================================
+void connectToWiFi() {
+  Serial.println("📡 Conectando WiFi...");
+  WiFiManager wifiManager;
+  wifiManager.setConfigPortalTimeout(180);
+
+  if (!wifiManager.autoConnect("AquaFlux_ESP001")) {
+    Serial.println("❌ Falha WiFi, reiniciando...");
+    delay(1000);
+    ESP.restart();
+  }
+  Serial.println("✅ WiFi: " + WiFi.localIP().toString());
+}
+
+// ============================================================
+void setupFirebase() {
+  Serial.println("🔥 Inicializando Firebase...");
+
+  config.host = FIREBASE_HOST;
+  config.signer.tokens.legacy_token = FIREBASE_AUTH;
+  config.database_url = "https://" + String(FIREBASE_HOST) + "/";
+
+  Firebase.begin(&config, &auth);
+  Firebase.reconnectWiFi(true);
+
+  yield();
+  delay(500);
+  yield();
+
+  if (Firebase.setString(firebaseData, "test", "ok")) {
+    firebaseReady = true;
+    Serial.println("✅ Firebase conectado");
+    Firebase.deleteNode(firebaseData, "test");
+  } else {
+    Serial.println("⚠️  Firebase com problemas");
+  }
+
+  yield();
+}
+
+// ============================================================
+void registerDevice() {
+  if (!firebaseReady) return;
+
+  FirebaseJson json;
+  json.set("id", ARDUINO_ID);
+  json.set("online", true);
+  json.set("state", false);
+  json.set("lastSeen", String(millis()));
+  json.set("ip", WiFi.localIP().toString());
+  json.set("rssi", WiFi.RSSI());
+  json.set("firmware", "3.9.0");
+  json.set("uptime", millis());
+
+  yield();
+  Firebase.updateNode(firebaseData, "arduinos/" + ARDUINO_ID, json);
+  yield();
+}
+
+// ============================================================
+void checkCommands() {
+  if (!firebaseReady) return;
+
+  yield();
+  if (Firebase.getBool(firebaseData, "arduinos/" + ARDUINO_ID + "/state")) {
+    bool newState = firebaseData.boolData();
+    if (!hasActiveSchedule && newState != relayState) {
+      relayState = newState;
+      lastChangeType = "manual";
+    }
+  }
+
+  yield();
+  if (Firebase.getString(firebaseData, "arduinos/" + ARDUINO_ID + "/controlledBy")) {
+    String tempUserId = firebaseData.stringData();
+    if (tempUserId != "" && tempUserId != "null" && tempUserId != currentUserId) {
+      currentUserId = tempUserId;
+      Serial.println("👤 UserId atualizado: " + currentUserId);
+      findDeviceFirebaseId();
+    }
+  }
+  yield();
+}
+
+// ============================================================
+void updateScheduleState() {
+  Serial.println("\n========== AGENDAMENTOS ==========");
+
+  hasActiveSchedule = false;
+  scheduleRelayState = false;
+
+  if (currentUserId == "") {
+    Serial.println("❌ UserId vazio");
+    Serial.println("==================================\n");
+    return;
+  }
+
+  yield();
+
+  String nowTime = getFormattedTime();
+  int nowHour = nowTime.substring(0, 2).toInt();
+  int nowMin = nowTime.substring(3, 5).toInt();
+  int nowTotal = nowHour * 60 + nowMin;
+
+  time_t epochTime = timeClient.getEpochTime();
+  struct tm *ptm = localtime(&epochTime);
+  int weekDay = ptm->tm_wday;
+
+  Serial.println("⏰ " + nowTime + " (" + String(nowTotal) + " min)");
+  Serial.println("📅 Dia " + String(weekDay));
+  Serial.println("👤 User: " + currentUserId);
+  Serial.println("📱 DeviceId: " + (deviceFirebaseId == "" ? "VAZIO!" : deviceFirebaseId));
+
+  String schedulesPath = "users/" + currentUserId + "/schedules";
+
+  yield();
+  if (!Firebase.getJSON(firebaseData, schedulesPath)) return;
+
+  String payload = firebaseData.payload();
+  if (payload == "null" || payload.length() < 5) {
+    Serial.println("❌ Sem schedules");
+    return;
+  }
+
+  int pos = 0;
+  int num = 0;
+
+  while (true) {
+    yield();
+
+    pos = payload.indexOf("\"-", pos);
+    if (pos == -1) break;
+
+    int endPos = payload.indexOf("\"", pos + 1);
+    if (endPos == -1) break;
+
+    String scheduleId = payload.substring(pos + 1, endPos);
+    pos = endPos;
+    num++;
+
+    Serial.println("\n#" + String(num) + " " + scheduleId);
+    String basePath = schedulesPath + "/" + scheduleId;
+
+    yield();
+    bool active = false;
+    if (Firebase.getBool(firebaseData, basePath + "/active")) {
+      active = firebaseData.boolData();
+    }
+    if (!active) {
+      Serial.println("  ⏭️  Inativo");
+      continue;
+    }
+
+    yield();
+    String scheduleDeviceId = "";
+    if (Firebase.getString(firebaseData, basePath + "/deviceId")) {
+      scheduleDeviceId = firebaseData.stringData();
+      scheduleDeviceId.trim();
+    }
+
+    Serial.println("  deviceId: '" + scheduleDeviceId + "'");
+
+    bool deviceMatch = false;
+    if (scheduleDeviceId == ARDUINO_ID) {
+      deviceMatch = true;
+      Serial.println("  ✓ Match direto com ESP_001");
+    } else if (deviceFirebaseId != "" && scheduleDeviceId == deviceFirebaseId) {
+      deviceMatch = true;
+      Serial.println("  ✓ Match com deviceFirebaseId");
+    } else {
+      Serial.println("  ❌ Não corresponde");
+    }
+
+    if (!deviceMatch) continue;
+
+    yield();
+    String daysPath = basePath + "/days";
+    bool dayValid = false;
+
+    if (Firebase.getJSON(firebaseData, daysPath)) {
+      String daysPayload = firebaseData.payload();
+
+      if (daysPayload.startsWith("[")) {
+        dayValid = (daysPayload.indexOf("\"" + String(weekDay) + "\"") != -1);
+      } else if (daysPayload.startsWith("{")) {
+        if (Firebase.getString(firebaseData, daysPath + "/" + String(weekDay))) {
+          String dayValue = firebaseData.stringData();
+          dayValid = (dayValue != "" && dayValue != "null");
+        }
+      }
+    }
+
+    if (!dayValid) {
+      Serial.println("  ⏭️  Dia não configurado");
+      continue;
+    }
+
+    yield();
+    String startStr = "", endStr = "";
+    if (Firebase.getString(firebaseData, basePath + "/start")) startStr = firebaseData.stringData();
+    yield();
+    if (Firebase.getString(firebaseData, basePath + "/end")) endStr = firebaseData.stringData();
+
+    if (startStr.length() < 5 || endStr.length() < 5) continue;
+
+    int startTotal = startStr.substring(0, 2).toInt() * 60 + startStr.substring(3, 5).toInt();
+    int endTotal = endStr.substring(0, 2).toInt() * 60 + endStr.substring(3, 5).toInt();
+
+    Serial.println("  " + startStr + "-" + endStr);
+
+    if (nowTotal >= startTotal && nowTotal <= endTotal) {
+      Serial.println("  ✅ DENTRO DO HORÁRIO!");
+      hasActiveSchedule = true;
+      scheduleRelayState = true;
+      Serial.println("==================================\n");
+      return;
+    }
+  }
+
+  Serial.println("\n❌ Nenhum ativo agora");
+  Serial.println("==================================\n");
+}
+
+// ============================================================
+void controlRelay() {
+  bool desiredState = relayState;
+
+  if (hasActiveSchedule) {
+    desiredState = scheduleRelayState;
+    lastChangeType = "auto";
+  }
+
+  if (desiredState != lastRelayState) {
+    digitalWrite(RELAY_PIN, desiredState ? HIGH : LOW);
+
+    if (desiredState) {
+      relayOnTime = millis();
+      Serial.println("\n🔴 LIGANDO (" + lastChangeType + ")\n");
+    } else {
+      unsigned long durationMs = millis() - relayOnTime;
+      Serial.println("\n⚫ DESLIGANDO (" + formatDuration(durationMs) + ")\n");
+      saveHistory(durationMs);
+    }
+
+    relayState = desiredState;
+    lastRelayState = desiredState;
+    updateStatus();
+  }
+}
+
+// ============================================================
+void updateStatus() {
+  if (!firebaseReady) return;
+
+  yield();
+  FirebaseJson json;
+  json.set("online", true);
+  json.set("state", relayState);
+  json.set("lastSeen", String(millis()));
+  json.set("rssi", WiFi.RSSI());
+  json.set("uptime", millis());
+
+  Firebase.updateNode(firebaseData, "arduinos/" + ARDUINO_ID, json);
+  yield();
+}
+
+// ============================================================
+void sendHeartbeat() {
+  if (!firebaseReady || !initialSetupDone) return;
+
+  yield();
+  FirebaseJson json;
+  json.set("online", true);
+  json.set("lastSeen", String(millis()));
+  json.set("rssi", WiFi.RSSI());
+  json.set("uptime", millis());
+  json.set("freeHeap", ESP.getFreeHeap());
+
+  Firebase.updateNode(firebaseData, "arduinos/" + ARDUINO_ID, json);
+  yield();
+}
+
+// ============================================================
+void saveHistory(unsigned long onDurationMs) {
+  if (!firebaseReady) return;
+
+  yield();
+  String currentDate = getFormattedDate();
+  String durationStr = formatDuration(onDurationMs);
+
+  float waterFlow = 10.0;
+  if (deviceFirebaseId != "" && currentUserId != "") {
+    yield();
+    if (Firebase.getFloat(firebaseData, "users/" + currentUserId + "/devices/" + deviceFirebaseId + "/waterFlow")) {
+      waterFlow = firebaseData.floatData();
+    }
+  }
+
+  yield();
+  FirebaseJson historyJson;
+  historyJson.set("data", currentDate);
+  historyJson.set("tempoLigado", durationStr);
+  historyJson.set("lm", waterFlow);
+  historyJson.set("espId", ARDUINO_ID);
+  historyJson.set("userId", currentUserId);
+  historyJson.set("tipo", lastChangeType);
+
+  Firebase.pushJSON(firebaseData, "history/" + ARDUINO_ID, historyJson);
+  Serial.println("💾 Histórico salvo!");
+  yield();
+}

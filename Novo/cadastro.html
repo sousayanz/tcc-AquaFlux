@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <noscript>
+     <style>
+     body { display: none; }
+     </style>
+     <meta http-equiv="refresh" content="0;url=/index.html">
+  </noscript>
+  <!-- Define a codificação e idioma da página -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Título da aba do navegador -->
+  <title>AquaFlux - Cadastro</title>
+
+  <!-- Link para o arquivo CSS que contém estilos da página -->
+   <link rel="stylesheet" href="css/cadastro.css">
+
+  <!-- Importa o script JavaScript principal do cadastro como módulo -->
+  <script type="module" src="javascript/cadastro.js"></script>
+
+  <!-- Ícone da página mostrado na aba do navegador -->
+  <link rel="icon" type="image/x-icon" href="img/logo.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    
+
+  <!-- Container principal que divide a tela em duas partes -->
+  <div class="cadastro-wrapper">
+
+    <!-- Lado do formulário de cadastro -->
+    <div class="form-side">
+
+      <!-- Botão para fechar o cadastro (X no canto superior) -->
+      <button class="btn-sair" aria-label="Fechar cadastro">×</button>
+
+      <!-- Script para redirecionar ao clicar no botão de sair para index.html -->
+      <script>
+        document.querySelector('.btn-sair').addEventListener('click', () => {
+          window.location.href = 'index.html'; // redireciona para a página inicial
+        });
+      </script>
+
+      <!-- Container do conteúdo do formulário -->
+      <div class="container">
+        <!-- Área do logo e títulos -->
+        <div class="logo">
+          <img class="FotoLogo" src="img/Aquaflux.png" alt="Logo AquaFlux" />
+          <h1>AQUAFLUX</h1>         <!-- Nome do site -->
+          <h2>Crie sua Conta</h2>  <!-- Subtítulo -->
+        </div>
+
+        <!-- Botões para escolher o tipo de cadastro (Pessoal ou Profissional) -->
+        <div class="tipo-cadastro">
+          <button type="button" class="tipo-option active" id="tipoPessoal">Pessoal (CPF)</button>
+          <button type="button" class="tipo-option" id="tipoProfissional">Profissional (CNPJ)</button>
+        </div>
+
+        <!-- Formulário de cadastro -->
+        <form id="cadastroForm">
+          <!-- Campo para digitar o nome completo -->
+          <div class="form-group">
+            <input type="text" id="nome" maxlength="40" placeholder="Digite seu nome completo" required />
+          </div>
+          <!-- Campo para CPF -->
+          <div class="form-group">
+            <input type="text" id="documento" maxlength="18" placeholder="Digite seu CPF" required />
+          </div>
+          <!-- Campo para e-mail -->
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Digite seu e-mail" required />
+          </div>
+          <!-- Campo para telefone -->
+          <div class="form-group">
+            <input type="tel" id="telefone" maxlength="20" placeholder="Digite seu telefone" required />
+          </div>
+          <!-- Campo para senha -->
+          <div class="form-group">
+            <input type="password" id="senha" placeholder="Crie uma senha" required />
+          </div>
+          <div class="checkbox-container">
+  <input type="checkbox" id="acceptTerms">
+  <label for="acceptTerms">
+    Li e aceito os <a href="#">Termos de Uso</a>
+  </label>
+</div>
+
+          <!-- Botão para enviar o formulário e cadastrar -->
+          <button type="submit" class="btn-primary" id="submitBtn">Cadastrar</button>
+        </form>
+
+        <!-- Área para mensagens dinâmicas, como erros ou confirmações -->
+        <div id="msg"></div>
+
+        <!-- Link para a página de login caso o usuário já tenha conta -->
+        <div class="login-link">
+          <p>
+            Já tem uma conta? <a href="login.html">Faça login</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lado da parte visual azul com animação de ondas -->
+    <div class="project-side">
+      <!-- SVG que cria ondas animadas no fundo -->
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <!-- Primeira camada de onda com cor azul escuro e opacidade -->
+        <path fill="#1a3d7c" fill-opacity="0.5" d="M0,64L80,74.7C160,85,320,107,480,106.7C640,107,800,85,960,90.7C1120,96,1280,128,1360,144L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+        <!-- Segunda camada de onda com cor azul clara e opacidade -->
+        <path fill="#4091f7" fill-opacity="0.5" d="M0,224L80,197.3C160,171,320,117,480,122.7C640,128,800,192,960,181.3C1120,171,1280,85,1360,42.7L1440,0L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+      </svg>
+    </div>
+
+  </div>
+<div class="wave-transition" id="waveTransition">
+  <svg class="transition-waves" viewBox="0 0 1440 320" preserveAspectRatio="none">
+    <path fill="#1976d2" fill-opacity="0.7"
+      d="M0,160 Q480,280 960,160 T1440,160 V320 H0 Z"/>
+    <path fill="#4091f7" fill-opacity="0.4"
+      d="M0,250 Q400,180 1000,250 T1440,220 V320 H0 Z"/>
+  </svg>
+</div>
+<!-- Script removido - funcionalidade já existe no cadastro.js -->
+<div id="emailVerifyOverlay" class="email-verify-overlay" style="display:none;">
+  <div class="email-verify-backdrop"></div>
+  <div class="email-verify-modal">
+    <div class="spinner"></div>
+    <h2>Verifique seu e-mail</h2>
+    <p>Enviamos um link de confirmação para o endereço cadastrado.</p>
+    <ol>
+      <li>Abra a sua caixa de e-mail.</li>
+      <li>Procure pelo e-mail de verificação do AquaFlux.</li>
+      <li>Clique no link de confirmação para ativar sua conta.</li>
+      <li>Depois, volte para a tela de login e acesse com seu CPF/CNPJ e senha.</li>
+    </ol>
+    <button id="goToLoginBtn" class="btn-go-login">Ir para tela de login</button>
+  </div>
+</div>
+
+
+</body>
+</html>

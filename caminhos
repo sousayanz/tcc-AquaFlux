@@ -1,0 +1,45 @@
+📂Novo
+┃ ┣ 📂css
+┃ ┃ ┣ 📜cadastro.css
+┃ ┃ ┣ 📜configbombas.css
+┃ ┃ ┣ 📜dados.css
+┃ ┃ ┣ 📜home.css
+┃ ┃ ┣ 📜ia.css
+┃ ┃ ┣ 📜index.css
+┃ ┃ ┣ 📜login.css
+┃ ┃ ┗ 📜user-info.css
+┃ ┣ 📂img
+┃ ┃ ┣ 📜1.png
+┃ ┃ ┣ 📜2.png
+┃ ┃ ┣ 📜3.png
+┃ ┃ ┣ 📜4.png
+┃ ┃ ┣ 📜5.png
+┃ ┃ ┣ 📜af_icon1.png
+┃ ┃ ┣ 📜af_icon2.png
+┃ ┃ ┣ 📜af_icon3.png
+┃ ┃ ┣ 📜af_icon4.png
+┃ ┃ ┣ 📜af_icon5.png
+┃ ┃ ┣ 📜af_icon6.png
+┃ ┃ ┣ 📜Aquaflux.png
+┃ ┃ ┣ 📜Aquaflux1.png
+┃ ┃ ┣ 📜FundoSite.png
+┃ ┃ ┣ 📜imag1.jpg
+┃ ┃ ┣ 📜imag2.jpg
+┃ ┃ ┣ 📜imag3.jpg
+┃ ┃ ┗ 📜logo.ico
+┃ ┣ 📂javascript
+┃ ┃ ┣ 📜cadastro.js
+┃ ┃ ┣ 📜dados.js
+┃ ┃ ┣ 📜home.js
+┃ ┃ ┣ 📜ia.js
+┃ ┃ ┣ 📜infouser.js
+┃ ┃ ┣ 📜login.js
+┃ ┃ ┗ 📜pump-scheduler.js
+┃ ┣ 📜cadastro.html
+┃ ┣ 📜configBombas.html
+┃ ┣ 📜dados.html
+┃ ┣ 📜home.html
+┃ ┣ 📜index.html
+┃ ┣ 📜infoUsuarios.html
+┃ ┣ 📜login.html
+┃ ┗ 📜terra.html

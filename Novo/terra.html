@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <noscript>
+     <style>
+     body { display: none; }
+     </style>
+     <meta http-equiv="refresh" content="0;url=/index.html">
+    </noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terra IA - Assistente AquaFlux</title>
+    <link rel="stylesheet" href="css/ia.css">
+    <link rel="icon" type="image/x-icon" href="img/logo.ico">
+    
+    
+    <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alice&family=Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <script type="importmap">
+        {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+        }
+        </script>
+    
+        <!-- ✅ SEU SCRIPT COMO MÓDULO -->
+        <script type="module" src="javascript/ia.js"></script>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="home.html" class="back-btn">
+                <span>← Voltar</span> 
+            </a>
+            <h1><img src="img/icon-terraia.png" alt="terria" class="ia"/></h1>
+            <h1 class="terra">Terra IA</h1>
+            
+        </div>
+    </header>
+
+    <!-- Container Principal -->
+    <div class="chat-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="terra-logo">
+                    <div class="logo-icon"><h1><img src="img/icon-terraia.png" alt="terria" class="ia"/></div>
+                    <div class="logo-text">Terra IA</div>
+                </div>
+            </div>
+
+            <div class="conversations-section">
+                <h3>Conversas Recentes</h3>
+                <div class="conversations-list" id="conversationsList">
+                    <!-- Conversas serão carregadas aqui -->
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="newChatMobile" class="new-chat-mobile">
+                    ➕ Nova Conversa
+                </button>
+            </div>
+        </aside>
+
+        <!-- Área Principal do Chat -->
+        <main class="chat-main">
+            <div class="chat-messages" id="chatMessages">
+                <!-- Tela de Boas-vindas -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-content">
+                        <div class="terra-avatar">🌱</div>
+                        <h2>Olá! Eu sou o Terra</h2>
+                        <p>Seu assistente especializado em irrigação e agricultura sustentável da AquaFlux. Como posso ajudá-lo hoje?</p>
+                        
+                        <div class="suggested-topics">
+                            <h3>Tópicos Sugeridos</h3>
+                            <div class="topics-grid">
+                                <button class="topic-btn" data-topic="Como calcular a vazão ideal para meu sistema de irrigação?">
+                                    <div class="topic-icon">💧</div>
+                                    <div class="topic-text">Cálculo de Vazão</div>
+                                </button>
+                                <button class="topic-btn" data-topic="Qual o melhor tipo de bomba para minha aplicação?">
+                                    <div class="topic-icon">⚡</div>
+                                    <div class="topic-text">Seleção de Bombas</div>
+                                </button>
+                                <button class="topic-btn" data-topic="Como implementar agricultura sustentável?">
+                                    <div class="topic-icon">🌿</div>
+                                    <div class="topic-text">Agricultura Sustentável</div>
+                                </button>
+                                <button class="topic-btn" data-topic="Quais sensores devo usar no meu sistema?">
+                                    <div class="topic-icon">📊</div>
+                                    <div class="topic-text">Sensores IoT</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Container de Mensagens -->
+                <div class="messages-container" id="messagesContainer" style="display: none;">
+                    <!-- Mensagens aparecerão aqui -->
+                </div>
+            </div>
+
+            <!-- Área de Input -->
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="Digite sua mensagem sobre irrigação, bombas ou agricultura..."
+                        rows="1"
+                    ></textarea>
+                    <button id="sendBtn" class="send-btn" disabled>
+                        <span class="send-icon">📤</span>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <small>Terra IA - Especialista em irrigação e agricultura sustentável</small>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AquaFlux — Sistema de Irrigação Inteligente</title>
+  <link rel="icon" type="image/x-icon" href="img/logo.ico">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alice&family=Garamond:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+  <!-- Top Accent Bar -->
+  <div class="top-rule" id="home"></div>
+
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="group">
+        <div class="left"> 
+          <button class="btn-cad" id="btn-cad">Cadastre-Se</button> 
+        </div>
+        <a href="#home" class="btn-a">Home</a>
+        <a href="#sobre" class="btn-a">Sobre o AQUAFLUX</a>
+        <a href="#economia" class="btn-a">Economia Sustentável</a>
+        <a href="#nos" class="btn-a">Nossas Tecnologias</a>
+        <a href="#entre" class="btn-a">Entre em Contato</a>
+
+        <div class="right">
+          <!-- Botão de login -->
+          <button class="btn-log" id="btn-log">Login</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Botão mobile (Hamburger) -->
+    <div class="mobile-menu-btn" id="mobile-menu-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <!-- Menu mobile -->
+    <div class="mobile-menu">
+      <a href="#home" class="btn-a">Home</a>
+      <a href="#sobre" class="btn-a">Sobre o AQUAFLUX</a>
+      <a href="#economia" class="btn-a">Economia Sustentável</a>
+      <a href="#nos" class="btn-a">Nossas Tecnologias</a>
+      <a href="#entre" class="btn-a">Entre em Contato</a>
+      <button class="btn-cad" id="btn-cad-mobile">Cadastre-Se</button>
+      <button class="btn-log" id="btn-log-mobile">Login</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="hero" data-header-contrast="dark">
+    <div class="logo-wrap">
+      <h1 class="brand">AQUAFLUX</h1>
+      <div class="subtitle">SISTEMA DE IRRIGAÇÃO INTELIGENTE</div>
+    </div>
+  </main>
+
+  <script>
+    // Evento de clique para o botão de Login (desktop e mobile)
+    document.getElementById("btn-log").addEventListener("click", function() {
+      window.location.href = "loading.html?redirect=login";
+    });
+
+    document.getElementById("btn-log-mobile").addEventListener("click", function() {
+      window.location.href = "loading.html?redirect=login";
+    });
+
+    // Evento de clique para o botão de Cadastro (desktop e mobile)
+    document.getElementById("btn-cad").addEventListener("click", function() {
+      window.location.href = "loading.html?redirect=cadastro";
+    });
+
+    document.getElementById("btn-cad-mobile").addEventListener("click", function() {
+      window.location.href = "loading.html?redirect=cadastro";
+    });
+
+    // Menu mobile toggle
+    const btn = document.querySelector("#mobile-menu-btn");
+    const menu = document.querySelector(".mobile-menu");
+
+    btn.addEventListener("click", () => {
+      btn.classList.toggle("active");
+      menu.classList.toggle("open");
+    });
+
+    // Muda o header ao rolar
+    window.addEventListener("scroll", () => {
+      const header = document.querySelector("header");
+      if (window.scrollY > 20) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+
+    // Fecha o menu ao expandir a janela novamente
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768) {
+        menu.classList.remove("open");
+        btn.classList.remove("active");
+      }
+    });
+  </script>
+ 
+
+
+ <!-- Top Accent Bar -->
+  <div class="top-rule" id="economia" ></div>
+<section class="aquaflux-section" data-header-contrast="light">
+
+    <!-- Header -->
+    <div class="aquaflux-header">
+        <div class="aquaflux-title">
+            <h1 class="aquaflux-title-main">Uma Economia</h1>
+            <h2 class="aquaflux-title-secondary">
+                Sustentavel
+            </h2><br><br><br>
+        </div>
+    </div>
+
+    <!-- Descrição -->
+    <div class="aquaflux-container">
+        <div class="aquaflux-description">
+            <p>O AquaFlux é um sistema de irrigação inteligente que combina tecnologia, eficiência e responsabilidade ambiental para promover o uso racional da água na agricultura. Ao monitorar em tempo real fatores como umidade do solo, clima e necessidade hídrica das plantas, o sistema aciona a irrigação apenas quando necessário, evitando desperdícios e reduzindo significativamente o consumo de água e energia. Essa automatização garante irrigação precisa, melhora a saúde das plantas e aumenta o rendimento das lavouras.</p>
+            
+            <p>Além de reduzir custos operacionais, o AquaFlux oferece configurações personalizadas para cada tipo de cultivo e contribui para a preservação dos recursos naturais. Sua economia sustentável vai além da água: inclui eficiência energética, menos manutenções e otimização do tempo do produtor. Assim, o projeto demonstra que inovação e sustentabilidade podem caminhar juntos, tornando a gestão agrícola mais inteligente, econômica e ecologicamente responsável.</p><br>
+        </div>
+
+        <!-- Grid de Features -->
+        <div class="aquaflux-features-grid">
+            <!-- Card 1 -->
+            <div class="aquaflux-card">
+                <div class="aquaflux-card-icon"><img src="img/af_icon1.png" id="icon"></div>
+                <h3 class="aquaflux-card-title">Monitoramento em Tempo Real</h3>
+                <p class="aquaflux-card-text">Acompanhe o consumo de água em tempo real com dashboards interativos e alertas inteligentes.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="aquaflux-card">
+                <div class="aquaflux-card-icon"><img src="img/af_icon2.png" id="icon"></div>
+                <h3 class="aquaflux-card-title">Controle de Qualidade</h3>
+                <p class="aquaflux-card-text">Monitore a qualidade da água com sensores avançados e receba relatórios detalhados.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="aquaflux-card">
+                <div class="aquaflux-card-icon"><img src="img/af_icon3.png" id="icon"></div>
+                <h3 class="aquaflux-card-title">Acesso Mobile</h3>
+                <p class="aquaflux-card-text">Gerencie seu sistema de qualquer lugar através do nosso aplicativo mobile intuitivo.</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="aquaflux-card">
+                <div class="aquaflux-card-icon"><img src="img/af_icon4.png" id="icon"></div>
+                <h3 class="aquaflux-card-title">Economia de Energia</h3>
+                <p class="aquaflux-card-text">Otimize o uso de bombas e sistemas de irrigação para reduzir custos operacionais.</p>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="aquaflux-card">
+                <div class="aquaflux-card-icon"><img src="img/af_icon5.png" id="icon"></div>
+                <h3 class="aquaflux-card-title">Alertas Inteligentes</h3>
+                <p class="aquaflux-card-text">Receba notificações automáticas sobre vazamentos, manutenção e anomalias no sistema.</p>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="aquaflux-card">
+                <div class="aquaflux-card-icon"><img src="img/af_icon6.png" id="icon"></div>
+                <h3 class="aquaflux-card-title">Relatórios Avançados</h3>
+                <p class="aquaflux-card-text">Gere relatórios personalizados com análises preditivas e insights acionáveis.</p>
+            </div>
+        </div>
+    </div>
+</section>
+ <!-- Top Accent Bar -->
+  <div class="top-rule" id="sobre"></div>
+<!-- Seção AquaFlux -->
+<section class="aquaflux-section">
+    <div class="aquaflux-container">
+        <div class="aquaflux-content">
+            <div class="aquaflux-image">
+                <img src="img/economia.png" alt="Água correndo nas mãos">
+            </div>
+
+            <div class="aquaflux-text">
+                <p class="aquaflux-subtitle">Um pouco sobre a nossa história</p>
+                <h2 class="aquaflux-title-main">AQUAFLUX</h2>
+                <p>
+                    
+O AquaFlux é uma solução completa de IoT (Internet das Coisas) desenvolvida para transformar a gestão de recursos hídricos. Nossa plataforma integra sensores inteligentes, análise de dados e automação para proporcionar um controle total sobre o uso da água. Com tecnologia de ponta e interface intuitiva, ajudamos empresas, produtores rurais e condomínios a reduzirem desperdícios, cortarem custos e contribuírem para um planeta mais sustentável. Por meio de monitoramento em tempo real e relatórios detalhados, o AquaFlux permite identificar padrões de consumo, detectar vazamentos antes que se tornem críticos e otimizar processos operacionais de forma automática. </p>
+<p> Nossa plataforma é escalável e personalizável, adaptando-se às necessidades específicas de cada cliente, garantindo um retorno sobre investimento rápido e significativo. Além disso, com nossa solução, é possível reduzir o consumo de água em até 40%, gerando economia considerável enquanto contribui ativamente para a preservação deste recurso essencial.
+
+A implementação do AquaFlux é simples e não disruptiva, com suporte técnico especializado em cada etapa do processo. Nossa equipe trabalha em parceria com seus clientes para garantir uma integração perfeita com sistemas existentes, minimizando o tempo de configuração e maximizando o time-to-value.
+            </div></p>
+        </div>
+    </div>
+</section>
+
+<!-- Top Accent Bar -->
+  <div class="top-rule" id="nos"></div>
+<section class="tech-section reveal" data-header-contrast="light">
+
+    <div class="tech-container">
+
+        <div class="left-content reveal-left">
+
+            <div class="circle-bg parallax"></div>
+
+            <img src="  img/tecnologias.png" alt="Protótipo IoT" class="main-image">
+
+            <p class="description">
+                Através dessa base tecnológica, transformamos ideias acadêmicas em soluções
+                práticas e viáveis, demonstrando que é possível reduzir o consumo de água em
+                até 40% enquanto geramos impacto ambiental significativo e retorno financeiro rápido.
+            </p>
+        </div>
+
+        <div class="right-content reveal-right">
+            <h2 class="section-title">Nossas Tecnologias</h2>
+
+            <p>
+                No projeto AquaFlux, unimos criatividade e inovação para transformar a gestão
+                de recursos hídricos. <br><br>
+  
+                Nossos sensores IoT avançados monitoram o consumo de água com precisão,
+                capturando dados em tempo real e alimentando algoritmos de inteligência
+                artificial que identificam oportunidades de economia.
+
+                Além disso, nossa plataforma integra visualizações intuitivas e relatórios detalhados que facilitam a tomada de decisão. Com insights claros e personalizados, gestores, empresas e residências podem identificar desperdícios, otimizar processos e construir estratégias sustentáveis de longo prazo. O resultado é um ecossistema mais eficiente, conectado e preparado para os desafios hídricos do futuro.
+            </p>
+
+            <a href="cadastro.html" class="signup-btn">
+                <span class="btn-circle"></span>
+                Cadastre-se
+            </a>
+        </div>
+
+    </div>
+</section>
+<footer class="footer" id="entre">
+    <div class="footer-container">
+
+        <!-- COLUNA 1 -->
+        <div class="footer-col">
+            <h4>Desenvolvido Por</h4>
+            <p>Etec Jardim Ângela</p>
+        </div>
+
+        <!-- DIVISÓRIA -->
+        <span class="divider"></span>
+
+        <!-- COLUNA CENTRAL -->
+        <div class="footer-col center">
+            <p>©2025 Projeto TCC AQUAFLUX</p>
+        </div>
+
+        <!-- DIVISÓRIA -->
+        <span class="divider"></span>
+
+        <!-- COLUNA SOCIAL -->
+        <div class="footer-col">
+            <h4>Nos Acompanhe:</h4>
+           <div class="social-icons">
+    <a href="https://wa.me/5511959790051" class="icon"><i class="ri-whatsapp-fill"></i></a>
+    <a href="instagram.com/tccaquaflux" class="icon"><i class="ri-instagram-fill"></i></a>
+    <a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSKhplwFHJsvplTgRdgfVcJkXDhwNJgszBCkDZQprtJJqzzPVtwTzqtXSXrkhpFwJpCJVlrQ" class="icon"><i class="ri-mail-line"></i></a>
+</div>
+
+        </div>
+    </div>
+</footer>
+
+<!-- Ícones (RemixIcon) -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+<script>
+/* ===== Scroll Reveal ===== */
+const reveals = document.querySelectorAll('.reveal');
+
+function revealOnScroll() {
+    reveals.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if(rect.top < window.innerHeight - 100) {
+            el.classList.add('show');
+        }
+    });
+}
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+
+/* ===== Parallax do círculo ===== */
+const circle = document.querySelector('.parallax');
+
+window.addEventListener('scroll', () => {
+    let offset = window.scrollY * 0.08;
+    circle.style.transform = `translateY(${offset}px)`;
+});
+</script>
+<script>
+(function() {
+  const header = document.querySelector('header');
+  if (!header) return;
+
+  // Ponto de checagem: central horizontal, logo abaixo da parte inferior do header
+  function getCheckPoint() {
+    const rect = header.getBoundingClientRect();
+    // um pixel abaixo do header (ajuste se header for transparente e overlap grande)
+    return { x: window.innerWidth / 2, y: rect.bottom + 4 };
+  }
+
+  // tenta encontrar a seção que ocupa esse ponto; procura data-header-contrast na hierarquia
+  function checkBackgroundContrast() {
+    const pt = getCheckPoint();
+    // proteger para telas muito pequenas
+    if (pt.y > window.innerHeight) pt.y = Math.min(window.innerHeight - 1, pt.y);
+
+    const el = document.elementFromPoint(pt.x, pt.y);
+    if (!el) return;
+
+    // sobe até encontrar um ancestor com data-header-contrast
+    let node = el;
+    while (node && node !== document.body) {
+      if (node.dataset && node.dataset.headerContrast) {
+        const contrast = node.dataset.headerContrast;
+        if (contrast === 'dark') {
+          header.classList.add('dark');
+        } else {
+          header.classList.remove('dark');
+        }
+        return;
+      }
+      node = node.parentElement;
+    }
+
+    // fallback automático simples: calcula a cor de fundo aproximada do elemento encontrado
+    // usa getComputedStyle (pode devolver 'transparent' — então sobe até achar cor)
+    node = el;
+    while (node && node !== document.body) {
+      const bg = getComputedStyle(node).backgroundColor;
+      if (bg && bg !== 'transparent' && bg !== 'rgba(0, 0, 0, 0)') {
+        // converte rgb/rgba para luminância simples
+        const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (m) {
+          const r = +m[1], g = +m[2], b = +m[3];
+          // luminance formula (perceptual)
+          const lum = 0.2126*r + 0.7152*g + 0.0722*b;
+          if (lum < 140) header.classList.add('dark');
+          else header.classList.remove('dark');
+          return;
+        }
+      }
+      node = node.parentElement;
+    }
+
+    // default: remove dark
+    header.classList.remove('dark');
+  }
+
+  // Throttle para performance (exec a cada 100ms em scroll/resize)
+  let ticking = false;
+  function onScrollOrResize() {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        checkBackgroundContrast();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+
+  window.addEventListener('scroll', onScrollOrResize, { passive: true });
+  window.addEventListener('resize', onScrollOrResize);
+  // run once on load
+  checkBackgroundContrast();
+})();
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,387 @@
+/* General Reset and body setup */
+body {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+body.visible {
+  opacity: 1;
+}
+
+/* Basic reset for all elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full height and width of the page */
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main container (login page) */
+.login-wrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  background: white;
+}
+
+/* Form Side */
+.form-side {
+  flex: 1;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 4rem;
+  position: relative;
+  min-width: 360px;
+  box-sizing: border-box;
+}
+
+/* Logo size */
+.FotoLogo {
+  width: 20%;
+}
+
+/* Body with background gradient and center alignment */
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e5f1fb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Form container */
+.container {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+  gap: 16px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Smooth slide-up animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Centralize and style title and subtitle */
+.logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.logo .FotoLogo {
+  width: 80px;
+  margin-bottom: 12px;
+}
+
+.logo h1 {
+ font-family: "Inter", sans-serif;
+  color: #2471A3;
+  font-size: 2.8em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.logo h2 {
+  color: #666;
+  font-size: 1.3em;
+  font-weight: normal;
+}
+
+/* Form field spacing */
+.form-group {
+  margin-bottom: 18px;
+}
+
+/* Input field styles */
+input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.8px solid #7ea0e9;
+  border-radius: 16px;
+  font-size: 1rem;
+  color: #1a3d7c;
+  transition: border-color 0.3s ease;
+}
+input::placeholder {
+  color: #aac3f8;
+}
+input:focus {
+  outline: none;
+  border-color: #1a3d7c;
+}
+
+/* Close button (X) */
+.btn-sair {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border: none;
+  background: none;
+  font-size: 1.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #2471A3;
+  transition: color 0.3s ease;
+  line-height: 1;
+  padding: 0;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.btn-sair:hover {
+  color: #0d3b66;
+  background: #d1e7ff;
+}
+
+/* Primary button styles */
+.btn-primary {
+  width: 100%;
+  min-height: 48px;
+  font-size: 1.18rem;
+  font-weight: 700;
+  border-radius: 20px;
+  margin-top: 22px;
+  margin-left: 0;
+  margin-bottom: 0;
+  background: #2471A3;
+  border: 2px solid #3893d3;
+  color: #fff;
+  box-sizing: border-box;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.btn-primary:hover {
+  background-color: #1a3d7c;
+}
+
+/* Disabled button state */
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Login link below form */
+.login-link {
+  margin-top: 24px;
+  text-align: center;
+}
+.login-link a {
+  color: #2471A3;
+  text-decoration: none;
+  font-weight: 600;
+}
+.login-link a:hover {
+  text-decoration: underline;
+}
+.login-link .cad{
+  color: #313131;
+  text-decoration: none;
+  font-weight: 400;
+}
+.login-link .cad:hover{
+
+  text-decoration: none;
+
+}
+/* Success and error message styles */
+.message {
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Error message style */
+.message.error {
+  background: #ffe6e6;
+  color: #d63384;
+  border: 1px solid #f5c6cb;
+}
+
+/* Success message style */
+.message.success {
+  background: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #badbcc;
+}
+
+/* Loading spinner */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #353994;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Forgot password link */
+.forgot-password {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: -25PX;
+  color: #2471A3; 
+  text-decoration: none;
+  font-weight: 600; 
+}
+
+.forgot-password a {
+  text-align: center;
+  margin-top: 15px;
+  color: #2471A3; 
+  text-decoration: none; 
+  font-weight: 600;
+}
+.forgot-password a:hover {
+  text-align: center;
+  margin-top: 15px;
+  color: #2471A3; 
+  text-decoration: underline; 
+}
+/* Right side with waves animation */
+.project-side {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #1a3d7c 0%, #4091f7 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 2rem;
+  padding: 2rem;
+  user-select: none;
+  height: 100%;
+  flex: 1;
+  height: 100vh;
+}
+
+.waves {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  overflow: visible;
+  z-index: 0;
+}
+
+/* Wave animations */
+.wave1 {
+  animation-name: waveAnimation1;
+  animation-duration: 7000ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.wave2 {
+  animation-name: waveAnimation2;
+  animation-duration: 10500ms;
+  animation-delay: 2000ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.wave3 {
+  animation-name: waveAnimation3;
+  animation-duration: 13000ms;
+  animation-delay: 3500ms;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Keyframes for waves */
+@keyframes waveAnimation1 {
+  0%   { transform: translateX(0) translateY(0) scale(1); }
+  50%  { transform: translateX(-15px) translateY(10px) scale(1.05); }
+  100% { transform: translateX(0) translateY(0) scale(1); }
+}
+
+@keyframes waveAnimation2 {
+  0%   { transform: translateX(0) translateY(0) scale(1); }
+  50%  { transform: translateX(18px) translateY(15px) scale(1.1); }
+  100% { transform: translateX(0) translateY(0) scale(1); }
+}
+
+@keyframes waveAnimation3 {
+  0%   { transform: translateX(0) translateY(0) scale(1); }
+  50%  { transform: translateX(-10px) translateY(5px) scale(1.03); }
+  100% { transform: translateX(0) translateY(0) scale(1); }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  /* Adjust the form side */
+  .form-side {
+    padding: 2rem 1.5rem;
+    flex: 1 1 auto;
+  }
+
+  /* Make the form layout vertical */
+  .login-wrapper {
+    flex-direction: column;
+  }
+
+  /* Adjust logo sizes for smaller screens */
+  .logo h1 {
+    font-size: 2.5em;
+  }
+
+  .logo h2 {
+    font-size: 1.2em;
+  }
+
+  /* Make the buttons and inputs adapt to smaller screens */
+  .btn-primary {
+    font-size: 1rem;
+    padding: 12px 0;
+  }
+
+  /* Adjust input fields */
+  input {
+    padding: 12px 16px;
+    font-size: 1rem;
+  }
+
+  /* Hide project-side background waves on smaller screens */
+  .project-side {
+    display: none;
+  }
+}

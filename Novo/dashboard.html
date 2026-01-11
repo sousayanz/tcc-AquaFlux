@@ -1,0 +1,3150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlux Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js para os gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Sistema de Notificações -->
+    <div class="notification-bell" id="notificationBell">
+        <svg viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <div class="notification-badge" id="notificationBadge">3</div>
+    </div>
+    
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-header">
+            <h3>Notificações</h3>
+            <button class="mark-all-read" id="markAllRead">Marcar todas como lidas</button>
+        </div>
+        <div class="notification-list" id="notificationList"></div>
+    </div>
+
+    <div class="sidebar">
+        <div class="logo">
+            <h1>
+
+                <span class="logo-text">AQUAFLUX</span>
+            </h1>
+        </div>
+        <nav class="menu">
+            <a href="#" class="menu-item active" data-section="dashboard">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Dashboard
+            </a>
+            <a href="#" class="menu-item" data-section="perfil">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>ircle cx="12" cy="7" r="4"/></svg>
+                Perfil
+            </a>
+            <a href="#" class="menu-item" data-section="bombas">
+                <svg viewBox="0 0 24 24">ircle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Bombas
+            </a>
+            <a href="#" class="menu-item" data-section="relatorios">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Relatórios
+            </a>
+            <a href="#" class="menu-item" data-section="dados">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                Dados
+            </a>
+            <a href="#" class="menu-item" data-section="configuracoes">
+                <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>ircle cx="12" cy="12" r="3"/></svg>
+                Configurações
+            </a>
+            <a href="#" class="menu-item terra-link" data-section="terra-ia">
+                <svg viewBox="0 0 24 24">
+                    ircle cx="12" cy="12" r="10"/>
+                    <path d="M2 12h20"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                Terra IA
+                <span class="terra-badge">BETA</span>
+            </a>
+        </nav>
+        <div class="logout">
+            <a href="#" class="menu-item" id="logoutBtn">
+                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <!-- ========== DASHBOARD ========== -->
+        <div id="dashboard" class="content-section active">
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    </div>
+                    <div class="header-text">
+                        <h2>Dashboard</h2>
+                        <p>Bem-vindo ao seu painel de controle</p>
+                    </div>
+                </div>
+                <div class="header-badge">Sistema Operacional</div>
+            </div>
+  <!-- 3 CARDS PRINCIPAIS -->
+  <div class="cards-grid">
+    
+    <!-- CARD 1: TOTAL RELATÓRIOS -->
+    <div class="card reports-card">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="23"/>
+        </svg>
+      </div>
+      <h3>Relatórios Gerados</h3>
+      <div class="card-value" id="totalReports">24</div>
+      <p>Este mês <span class="trend-positive">+12%</span></p>
+    </div>
+
+    <!-- CARD 2: CONTROLE BOMBAS (home.js integração) -->
+    <div class="card status-card pump-control">
+      <div class="card-icon">
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+          <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+          <line x1="16" y1="16" x2="26.01" y2="26"/>
+          <line x1="16" y1="8" x2="26.01" y2="18"/>
+        </svg>
+      </div>
+      <h3>Controle Bombas</h3>
+      <div class="status-info">
+        <div class="status-indicator" id="espStatus">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">EspCasa Offline</span>
+        </div>
+      </div>
+      <div class="status-time" id="lastConnection">Última conexão 08/12/2025, 10:28</div>
+       <label class="toggle-switch">
+                                <input type="checkbox" id="relaySwitch">
+                                <span class="switch-slider">
+                                    <span class="switch-button"></span>
+                                </span>
+                            </label>
+
+      <div class="status-label offline" id="relayStatus">DESLIGADO</div>
+    </div>
+
+    <!-- CARD 3: DADOS METEOROLÓGICOS (home.js integração) -->
+   <div class="card weather-card">
+  <div class="card-icon weather-icon-wrapper">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+    </svg>
+  </div>
+
+  <div class="weather-header">
+    <h3>Dados Meteorológicos</h3>
+    <span class="weather-badge">Tempo real</span>
+  </div>
+
+  <div class="weather-main">
+    <span class="weather-temp" id="temperature">--°C</span>
+    <div class="weather-extra">
+      <span id="weatherDescription">Carregando...</span>
+      <span class="dot-separator">•</span>
+      <span id="humidity">--%</span>
+    </div>
+  </div>
+
+  <div class="weather-footer">
+    <span class="weather-location-label">Localização</span>
+    <span class="location-name" id="locationName">São Paulo, SP</span>
+  </div>
+</div>
+
+
+  </div>
+            <div class="terra-promo-card" onclick="navigateToTerra()">
+                <div class="terra-promo-icon">
+                    <svg viewBox="0 0 24 24">
+                        ircle cx="12" cy="12" r="10"/>
+                        <path d="M2 12h20"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                </div>
+                <div class="terra-promo-content">
+                    <h3>Precisa de ajuda? Pergunte à <span class="terra-name">Terra IA</span></h3>
+                    <p>Tire dúvidas sobre AquaFlux, irrigação inteligente, configuração de bombas e economia de água.</p>
+                </div>
+                <a href="#" class="terra-promo-btn" onclick="event.stopPropagation(); navigateToTerra();">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Conversar
+                </a>
+            </div>
+        </div>
+
+   <!-- ========== SEÇÃO DADOS - VERSÃO CORRIGIDA ========== -->
+        <!-- SEO DE DADOS - 100% CORRIGIDO -->
+<div id="dados" class="content-section">
+  <!-- Header com controles -->
+  <div class="header" data-header>
+    <div class="header-content">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 3v18h18"/>
+          <path d="M18 17V9"/>
+          <path d="M13 17V5"/>
+          <path d="M8 17v-3"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h2>Central de Dados</h2>
+        <p>Análise completa do seu sistema de irrigação</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <div class="control-group">
+        <label>Dispositivo</label>
+        <select id="deviceFilter" class="filter-select">
+          <option value="all">Todos os Dispositivos</option>
+        </select>
+      </div>
+      <div class="control-group">
+        <label>Período</label>
+        <select id="periodFilter" class="filter-select">
+          <option value="today">Hoje</option>
+          <option value="week" selected>Esta Semana</option>
+          <option value="month">Este Mês</option>
+          <option value="custom">Personalizado</option>
+        </select>
+      </div>
+      <button class="btn-export" id="exportBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Exportar
+      </button>
+    </div>
+  </div>
+
+  <!-- Quick Stats - Cards Principais -->
+  <div class="quick-stats-grid">
+    <div class="quick-stat-card stat-activations">
+      <div class="stat-icon-wrapper">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-data">
+        <span class="stat-value" id="totalActivationsMonth">0</span>
+        <span class="stat-label">Ativações do Mês</span>
+      </div>
+      <div class="stat-trend up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+          <polyline points="17 6 23 6 23 12"/>
+        </svg>
+        <span id="monthChange">+12%</span>
+      </div>
+    </div>
+
+    <div class="quick-stat-card stat-today">
+      <div class="stat-icon-wrapper">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-data">
+        <span class="stat-value" id="activationsToday">0</span>
+        <span class="stat-label">Ativações Hoje</span>
+      </div>
+      <div class="stat-trend up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+          <polyline points="17 6 23 6 23 12"/>
+        </svg>
+        <span id="todayChange">+3</span>
+      </div>
+    </div>
+
+    <div class="quick-stat-card stat-time">
+      <div class="stat-icon-wrapper">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4"/>
+            <path d="M12 18v4"/>
+            <path d="M4.93 4.93l2.83 2.83"/>
+            <path d="M16.24 16.24l2.83 2.83"/>
+            <path d="M2 12h4"/>
+            <path d="M18 12h4"/>
+            <path d="M4.93 19.07l2.83-2.83"/>
+            <path d="M16.24 7.76l2.83-2.83"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-data">
+        <span class="stat-value"><span id="timeTodayMinutes">0</span><small>min</small></span>
+        <span class="stat-label">Tempo Hoje</span>
+      </div>
+      <div class="stat-trend neutral">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        <span id="timeChange">0min</span>
+      </div>
+    </div>
+
+    <div class="quick-stat-card stat-week">
+      <div class="stat-icon-wrapper">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-data">
+        <span class="stat-value"><span id="timeWeekHours">0.0</span><small>h</small></span>
+        <span class="stat-label">Tempo Semanal</span>
+      </div>
+      <div class="stat-trend up">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+          <polyline points="17 6 23 6 23 12"/>
+        </svg>
+        <span id="weekTimeChange">+2.5h</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção de Consumo de Água -->
+  <div class="water-consumption-section">
+    <div class="water-consumption-card">
+      <div class="water-header">
+        <div class="water-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <div class="water-title">
+          <h3>Consumo de Água</h3>
+          <p>Monitoramento em tempo real</p>
+        </div>
+      </div>
+      
+      <div class="water-stats-row">
+        <div class="water-stat-item">
+          <div class="water-stat-circle">
+            <svg viewBox="0 0 36 36" class="circular-chart">
+              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              <path class="circle-progress daily" id="dailyProgress" stroke-dasharray="30, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            </svg>
+            <span class="water-stat-value" id="dailyWaterConsumption">0L</span>
+          </div>
+          <span class="water-stat-label">Diário</span>
+        </div>
+
+        <div class="water-stat-item featured">
+          <div class="water-stat-circle large">
+            <svg viewBox="0 0 36 36" class="circular-chart">
+              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              <path class="circle-progress weekly" id="weeklyProgress" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            </svg>
+            <span class="water-stat-value" id="weeklyWaterConsumption">0L</span>
+          </div>
+          <span class="water-stat-label">Semanal</span>
+        </div>
+
+        <div class="water-stat-item">
+          <div class="water-stat-circle">
+            <svg viewBox="0 0 36 36" class="circular-chart">
+              <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              <path class="circle-progress monthly" id="monthlyProgress" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            </svg>
+            <span class="water-stat-value" id="monthlyWaterConsumption">0L</span>
+          </div>
+          <span class="water-stat-label">Mensal</span>
+        </div>
+      </div>
+
+      <div class="water-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-icon auto">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4"/>
+              <path d="M12 18v4"/>
+              <path d="M4.93 4.93l2.83 2.83"/>
+              <path d="M16.24 16.24l2.83 2.83"/>
+              <path d="M2 12h4"/>
+              <path d="M18 12h4"/>
+            </svg>
+          </div>
+          <div class="breakdown-info">
+            <span class="breakdown-value" id="autoConsumption">0L</span>
+            <span class="breakdown-label">Automático</span>
+          </div>
+          <div class="breakdown-bar">
+            <div class="breakdown-fill auto" id="autoFill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="breakdown-item">
+          <div class="breakdown-icon manual">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+              <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/>
+              <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
+              <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+            </svg>
+          </div>
+          <div class="breakdown-info">
+            <span class="breakdown-value" id="manualConsumption">0L</span>
+            <span class="breakdown-label">Manual</span>
+          </div>
+          <div class="breakdown-bar">
+            <div class="breakdown-fill manual" id="manualFill" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="water-cost">
+        <div class="cost-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="cost-info">
+          <span class="cost-label">Custo Estimado Mensal</span>
+          <span class="cost-value" id="estimatedCost">R$ 0,00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos Section -->
+  <div class="charts-section">
+    <div class="section-header">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        Análise Visual
+      </h3>
+      <div class="section-tabs">
+        <button class="section-tab active" data-view="charts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9"/>
+            <path d="M13 17V5"/>
+            <path d="M8 17v-3"/>
+          </svg>
+          Gráficos
+        </button>
+        <button class="section-tab" data-view="insights">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 16v-4"/>
+            <path d="M12 8h.01"/>
+          </svg>
+          Insights IA
+        </button>
+      </div>
+    </div>
+
+    <!-- View de Gráficos -->
+    <div class="view-content active" id="chartsView">
+      <div class="charts-grid">
+        <!-- Gráfico Principal - Ativações -->
+        <div class="chart-card chart-main">
+          <div class="chart-card-header">
+            <div class="chart-title">
+              <span class="chart-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 3v18h18"/>
+                  <path d="M18 17V9"/>
+                  <path d="M13 17V5"/>
+                  <path d="M8 17v-3"/>
+                </svg>
+              </span>
+              <h4>Ativações por Período</h4>
+            </div>
+            <div class="chart-period-tabs">
+              <button class="period-tab active" data-period="7d">7D</button>
+              <button class="period-tab" data-period="30d">30D</button>
+              <button class="period-tab" data-period="90d">90D</button>
+            </div>
+          </div>
+          <div class="chart-card-body">
+            <canvas id="activationsChart"></canvas>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-stat">
+              <span class="chart-stat-value" id="chartTotalActivations">0</span>
+              <span class="chart-stat-label">Total</span>
+            </div>
+            <div class="chart-stat">
+              <span class="chart-stat-value" id="chartAvgPerDay">0</span>
+              <span class="chart-stat-label">Média/Dia</span>
+            </div>
+            <div class="chart-stat highlight">
+              <span class="chart-stat-value" id="chartTrend">0%</span>
+              <span class="chart-stat-label">vs. anterior</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico de Tempo -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title">
+              <span class="chart-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </span>
+              <h4>Tempo de Irrigação</h4>
+            </div>
+          </div>
+          <div class="chart-card-body">
+            <canvas id="timeChart"></canvas>
+          </div>
+          <div class="chart-legend-inline">
+            <span class="legend-item"><span class="legend-dot auto"></span> Automático</span>
+            <span class="legend-item"><span class="legend-dot manual"></span> Manual</span>
+          </div>
+        </div>
+
+        <!-- Gráfico de Horário -->
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-title">
+              <span class="chart-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v2"/>
+                  <path d="M12 21v2"/>
+                  <path d="M4.22 4.22l1.42 1.42"/>
+                  <path d="M18.36 18.36l1.42 1.42"/>
+                  <path d="M1 12h2"/>
+                  <path d="M21 12h2"/>
+                  <path d="M4.22 19.78l1.42-1.42"/>
+                  <path d="M18.36 5.64l1.42-1.42"/>
+                </svg>
+              </span>
+              <h4>Distribuição Horária</h4>
+            </div>
+          </div>
+          <div class="chart-card-body">
+            <canvas id="hourlyChart"></canvas>
+          </div>
+          <div class="chart-insight">
+            <span class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v4"/>
+                <path d="M12 18v4"/>
+                <path d="M4.93 4.93l2.83 2.83"/>
+                <path d="M16.24 16.24l2.83 2.83"/>
+              </svg>
+            </span>
+            <span>Pico de uso: <strong id="peakHour">06:00 - 08:00</strong></span>
+          </div>
+        </div>
+
+        <!-- Gráfico de Eficiência -->
+        <div class="chart-card chart-efficiency">
+          <div class="chart-card-header">
+            <div class="chart-title">
+              <span class="chart-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                  <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+              </span>
+              <h4>Eficiência do Sistema</h4>
+            </div>
+          </div>
+          <div class="chart-card-body efficiency-body">
+            <div class="efficiency-chart-wrapper">
+              <canvas id="efficiencyChart"></canvas>
+              <div class="efficiency-center">
+                <span class="efficiency-value" id="efficiencyMainValue">98%</span>
+                <span class="efficiency-label">Sucesso</span>
+              </div>
+            </div>
+            <div class="efficiency-stats">
+              <div class="efficiency-stat">
+                <div class="efficiency-stat-header">
+                  <span class="efficiency-dot success"></span>
+                  <span>Taxa de Sucesso</span>
+                </div>
+                <span class="efficiency-stat-value" id="dataSuccessRate">98%</span>
+              </div>
+              <div class="efficiency-stat">
+                <div class="efficiency-stat-header">
+                  <span class="efficiency-dot uptime"></span>
+                  <span>Uptime</span>
+                </div>
+                <span class="efficiency-stat-value" id="dataUptime">99.2%</span>
+              </div>
+              <div class="efficiency-stat">
+                <div class="efficiency-stat-header">
+                  <span class="efficiency-dot response"></span>
+                  <span>Tempo Resposta</span>
+                </div>
+                <span class="efficiency-stat-value">1.2s</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View de Insights IA -->
+    <div class="view-content" id="insightsView">
+      <div class="insights-grid">
+        <div class="insight-card primary">
+          <div class="insight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <div class="insight-content">
+            <h4>Padrão de Uso Identificado</h4>
+            <p>Seus horários de pico são <strong>06:00-08:00</strong> e <strong>18:00-20:00</strong>. Considere ajustar os agendamentos para otimizar o consumo.</p>
+          </div>
+          <div class="insight-badge">Alta Relevância</div>
+        </div>
+
+        <div class="insight-card success">
+          <div class="insight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+          </div>
+          <div class="insight-content">
+            <h4>Economia de Água</h4>
+            <p>Você economizou <strong>23%</strong> de água este mês comparado ao anterior. Continue com o excelente trabalho!</p>
+          </div>
+          <div class="insight-badge success">Economia</div>
+        </div>
+
+        <div class="insight-card warning">
+          <div class="insight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="insight-content">
+            <h4>Atenção: Uso Prolongado</h4>
+            <p>Detectamos <strong>3 ativações</strong> com duração acima de 2 horas na última semana. Verifique se há vazamentos.</p>
+          </div>
+          <div class="insight-badge warning">Alerta</div>
+        </div>
+
+        <div class="insight-card info">
+          <div class="insight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <path d="M12 17h.01"/>
+            </svg>
+          </div>
+          <div class="insight-content">
+            <h4>Dica de Eficiência</h4>
+            <p>Irrigar durante o amanhecer (5h-7h) reduz evaporação em até 40%. Ajuste seus horários para economizar ainda mais.</p>
+          </div>
+          <div class="insight-badge info">Dica</div>
+        </div>
+
+        <div class="insight-card primary">
+          <div class="insight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="20" x2="12" y2="10"/>
+              <line x1="18" y1="20" x2="18" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="16"/>
+            </svg>
+          </div>
+          <div class="insight-content">
+            <h4>Performance Semanal</h4>
+            <p>Esta semana você teve <strong>95%</strong> de eficiência nas ativações programadas. Acima da média dos últimos 30 dias.</p>
+          </div>
+          <div class="insight-badge">Desempenho</div>
+        </div>
+
+        <div class="insight-card success">
+          <div class="insight-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <div class="insight-content">
+            <h4>Meta Atingida!</h4>
+            <p>Parabéns! Você atingiu a meta de economia de água do mês. Continue assim para manter o consumo sustentável.</p>
+          </div>
+          <div class="insight-badge success">Conquista</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Histórico de Atividades -->
+  <div class="history-section">
+    <div class="history-header" id="historyToggle">
+      <div class="history-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <h3>Histórico de Atividades</h3>
+        <span class="history-count" id="historyCount">0 registros</span>
+      </div>
+      <button class="history-toggle-btn" id="historyToggleBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+    </div>
+    <div class="history-content" id="historyContent">
+      <div class="history-table-container">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Data/Hora</th>
+              <th>Dispositivo</th>
+              <th>Ação</th>
+              <th>Duração</th>
+              <th>Consumo Est.</th>
+              <th>Origem</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <!-- Dados serão inseridos via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- ========== RELATÓRIOS ========== -->
+        <div id="relatorios" class="content-section">
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <div class="header-text">
+                        <h2>Relatórios</h2>
+                        <p>Gere e visualize relatórios detalhados</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reports-section">
+                <h2>Relatórios Disponíveis</h2>
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>Relatório Mensal</h3>
+                        <p>Análise completa do uso mensal com gráficos e estatísticas detalhadas.</p>
+                        <button class="generate-report-btn" data-type="monthly">
+                             Gerar Relatório
+                        </button>
+                    </div>
+                    
+                    <div class="report-card">
+                        <h3> Relatório de Custos</h3>
+                        <p>Estimativa de custos de água e análise de economia.</p>
+                        <button class="generate-report-btn" data-type="costs">
+                             Gerar Relatório
+                        </button>
+                    </div>
+                    
+                    <div class="report-card">
+                        <h3> Relatório de Performance</h3>
+                        <p>Análise de eficiência do sistema e recomendações.</p>
+                        <button class="generate-report-btn" data-type="performance">
+                             Gerar Relatório
+                        </button>
+                    </div>
+                    
+                    <div class="report-card">
+                        <h3> Relatório Customizado</h3>
+                        <p>Configure seu próprio relatório com métricas personalizadas.</p>
+                        <button class="generate-report-btn" data-type="custom">
+                             Configurar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Relatórios Recentes -->
+            <div class="history-section" style="margin-top: 30px;">
+                <h2>📁 Relatórios Recentes</h2>
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Período</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01/12/2025</td>
+                                <td><span class="device-badge">Mensal</span></td>
+                                <td>Novembro 2025</td>
+                                <td><span class="status-badge status-success">✓ Completo</span></td>
+                                <td>
+                                    <button class="export-btn" style="padding: 8px 15px; font-size: 12px;">📥 Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>25/11/2025</td>
+                                <td><span class="device-badge">Performance</span></td>
+                                <td>Q4 2025</td>
+                                <td><span class="status-badge status-success">✓ Completo</span></td>
+                                <td>
+                                    <button class="export-btn" style="padding: 8px 15px; font-size: 12px;">📥 Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>15/11/2025</td>
+                                <td><span class="device-badge">Custos</span></td>
+                                <td>Outubro 2025</td>
+                                <td><span class="status-badge status-success">✓ Completo</span></td>
+                                <td>
+                                    <button class="export-btn" style="padding: 8px 15px; font-size: 12px;">📥 Download</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+ <!-- PERFIL - INFORMAÇÕES DO USUÁRIO -->
+<section id="perfil" class="content-section">
+    <div class="header perfil-header">
+        <div class="header-content">
+            <div class="header-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    ircle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h2>Meu Perfil</h2>
+                <p>Gerencie suas informações pessoais e preferências.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Profile Card Principal -->
+    <div class="perfil-main-card">
+        <div class="perfil-hero">
+            <div class="perfil-hero-bg"></div>
+            <div class="perfil-hero-content">
+                <div class="profile-avatar-wrapper">
+                    <div class="avatar-circle" id="avatarCircle">U</div>
+                    <button class="change-avatar-btn" id="changeAvatarBtn" title="Alterar foto">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            ircle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                    </button>
+                    <div class="avatar-upload-progress" id="avatarProgress" style="display: none;">
+                        <svg class="progress-ring" viewBox="0 0 36 36">
+                            <path class="progress-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                            <path class="progress-ring-fill" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">Nome do Usuário</h2>
+                    <span class="status-badge-perfil active">
+                        <span class="status-dot"></span>
+                        Conta Ativa
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="perfil-stats">
+            <div class="perfil-stat-item">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-label">Membro desde</span>
+                    <span class="stat-value" id="memberSince">Janeiro 2024</span>
+                </div>
+            </div>
+            <div class="perfil-stat-item">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-label">Total de Logins</span>
+                    <span class="stat-value" id="totalLogins">0</span>
+                </div>
+            </div>
+            <div class="perfil-stat-item">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24">
+                        ircle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-label">Último Acesso</span>
+                    <span class="stat-value" id="lastLogin">Nunca</span>
+                </div>
+            </div>
+            <div class="perfil-stat-item">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="12" y1="1" x2="12" y2="23"></line>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-label">Tempo de Conta</span>
+                    <span class="stat-value" id="accountAge">0 dias</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de Informações -->
+    <div class="perfil-content-grid">
+        <!-- Coluna Esquerda -->
+        <div class="perfil-left-column">
+            <!-- Dados Básicos -->
+            <div class="perfil-section-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                ircle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h3>Informações Básicas</h3>
+                    </div>
+                    <button class="edit-btn-compact" id="editBasicInfoBtn" title="Editar informações">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="section-card-body" id="basicInfoForm">
+                    <div class="info-row">
+                        <label for="fullName">Nome Completo</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="fullName" readonly>
+                            <div class="input-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    ircle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <label for="displayName">Nome de Exibição</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="displayName" readonly>
+                            <div class="input-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    ircle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-row-group">
+                        <div class="info-row">
+                            <label for="birthDate">Data de Nascimento</label>
+                            <div class="input-wrapper">
+                                <input type="date" id="birthDate" readonly>
+                                <div class="input-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <label for="gender">Gênero</label>
+                            <div class="input-wrapper">
+                                <select id="gender" disabled>
+                                    <option value="">Não informado</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Feminino</option>
+                                    <option value="O">Outro</option>
+                                </select>
+                                <div class="input-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        ircle cx="12" cy="8" r="7"></circle>
+                                        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-card-footer">
+                    <button class="save-btn-primary" id="saveBasicInfo">
+                        <svg viewBox="0 0 24 24" class="btn-icon">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        <span>Salvar Alterações</span>
+                        <div class="btn-loader" style="display: none;">
+                            <svg class="spinner" viewBox="0 0 24 24">
+                                ircle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Endereço -->
+            <div class="perfil-section-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Endereço</h3>
+                    </div>
+                </div>
+                <div class="section-card-body" id="addressForm">
+                    <div class="info-row-group">
+                        <div class="info-row cep-row">
+                            <label for="zipCode">CEP</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="zipCode" maxlength="9" placeholder="00000-000">
+                                <button class="action-btn" id="cepLookupBtn" title="Buscar CEP">
+                                    <svg viewBox="0 0 24 24" class="search-icon">
+                                        ircle cx="11" cy="11" r="8"></circle>
+                                        <path d="m21 21-4.35-4.35"></path>
+                                    </svg>
+                                    <svg viewBox="0 0 24 24" class="loading-icon" style="display: none;">
+                                        ircle cx="12" cy="12" r="10"></circle>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <label for="number">Número</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="number" maxlength="5" placeholder="123">
+                                <div class="input-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                        <path d="M18 8a6 6 0 0 1-6 6 6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6z"></path>
+                                        <path d="M8 14v10M16 14v10"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <label for="street">Rua/Avenida</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="street" placeholder="Nome da rua">
+                            <div class="input-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <label for="complement">Complemento</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="complement" placeholder="Apto, Bloco, etc." maxlength="10">
+                            <div class="input-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    ircle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-row-group">
+                        <div class="info-row">
+                            <label for="neighborhood">Bairro</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="neighborhood" maxlength="30" placeholder="Bairro">
+                            </div>
+                        </div>
+                        <div class="info-row">
+                            <label for="city">Cidade</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="city" maxlength="30" placeholder="Cidade">
+                            </div>
+                        </div>
+                        <div class="info-row info-row-small">
+                            <label for="state">UF</label>
+                            <div class="input-wrapper">
+                                <select id="state">
+                                    <option value="">-</option>
+                                    <option value="AC">AC</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AP">AP</option>
+                                    <option value="AM">AM</option>
+                                    <option value="BA">BA</option>
+                                    <option value="CE">CE</option>
+                                    <option value="DF">DF</option>
+                                    <option value="ES">ES</option>
+                                    <option value="GO">GO</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MT">MT</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MG">MG</option>
+                                    <option value="PA">PA</option>
+                                    <option value="PB">PB</option>
+                                    <option value="PR">PR</option>
+                                    <option value="PE">PE</option>
+                                    <option value="PI">PI</option>
+                                    <option value="RJ">RJ</option>
+                                    <option value="RN">RN</option>
+                                    <option value="RS">RS</option>
+                                    <option value="RO">RO</option>
+                                    <option value="RR">RR</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SP">SP</option>
+                                    <option value="SE">SE</option>
+                                    <option value="TO">TO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section-card-footer">
+                    <button class="save-btn-primary" id="saveAddressBtn">
+                        <svg viewBox="0 0 24 24" class="btn-icon">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        <span>Salvar Endereço</span>
+                        <div class="btn-loader" style="display: none;">
+                            <svg class="spinner" viewBox="0 0 24 24">
+                                ircle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna Direita -->
+        <div class="perfil-right-column">
+            <!-- Contato (Protegido) -->
+            <div class="perfil-section-card protected-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Informações de Contato</h3>
+                    </div>
+                    <span class="protected-badge">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Protegido
+                    </span>
+                </div>
+                <div class="section-card-body">
+                    <div class="info-row protected-row">
+                        <label for="email">E-mail</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="email" readonly>
+                            <button class="copy-btn" data-copy="email" title="Copiar e-mail">
+                                <svg class="copy-icon" viewBox="0 0 24 24">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <svg class="check-icon" viewBox="0 0 24 24" style="display: none;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="protection-hint">
+                            <svg viewBox="0 0 24 24">
+                                ircle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            Entre em contato para alterar
+                        </span>
+                    </div>
+                    <div class="info-row protected-row">
+                        <label for="phone">Telefone</label>
+                        <div class="input-wrapper">
+                            <input type="tel" id="phone" readonly>
+                            <button class="copy-btn" data-copy="phone" title="Copiar telefone">
+                                <svg class="copy-icon" viewBox="0 0 24 24">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <svg class="check-icon" viewBox="0 0 24 24" style="display: none;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="protection-hint">
+                            <svg viewBox="0 0 24 24">
+                                ircle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            Entre em contato para alterar
+                        </span>
+                    </div>
+                    <div class="info-row protected-row">
+                        <label for="document">CPF/CNPJ</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="document" readonly>
+                            <button class="copy-btn" data-copy="document" title="Copiar documento">
+                                <svg class="copy-icon" viewBox="0 0 24 24">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <svg class="check-icon" viewBox="0 0 24 24" style="display: none;">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="protection-hint">
+                            <svg viewBox="0 0 24 24">
+                                ircle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            Entre em contato para alterar
+                        </span>
+                    </div>
+                </div>
+                <div class="section-card-footer">
+                    <button class="support-btn-primary" id="contactSupportBtn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        Entrar em Contato com Suporte
+                    </button>
+                </div>
+            </div>
+
+            <!-- Preferências -->
+            <div class="perfil-section-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                            </svg>
+                        </div>
+                        <h3>Notificações</h3>
+                    </div>
+                </div>
+                <div class="section-card-body">
+                    <div class="preference-toggle">
+                        <div class="toggle-icon-wrapper">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <div class="toggle-info">
+                            <span class="toggle-label">E-mail</span>
+                            <span class="toggle-description">Receber notificações por e-mail</span>
+                        </div>
+                        <label class="switch-modern">
+                            <input type="checkbox" id="emailNotifications" checked>
+                            <span class="switch-slider-modern"></span>
+                        </label>
+                    </div>
+                    <div class="preference-toggle">
+                        <div class="toggle-icon-wrapper">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg>
+                        </div>
+                        <div class="toggle-info">
+                            <span class="toggle-label">SMS</span>
+                            <span class="toggle-description">Receber notificações por SMS</span>
+                        </div>
+                        <label class="switch-modern">
+                            <input type="checkbox" id="smsNotifications">
+                            <span class="switch-slider-modern"></span>
+                        </label>
+                    </div>
+                    <div class="preference-toggle">
+                        <div class="toggle-icon-wrapper">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="toggle-info">
+                            <span class="toggle-label">Alertas do Sistema</span>
+                            <span class="toggle-description">Alertas importantes sobre o sistema</span>
+                        </div>
+                        <label class="switch-modern">
+                            <input type="checkbox" id="systemAlerts" checked>
+                            <span class="switch-slider-modern"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="section-card-footer">
+                    <button class="save-btn-primary" id="savePreferencesBtn">
+                        <svg viewBox="0 0 24 24" class="btn-icon">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        <span>Salvar Preferências</span>
+                        <div class="btn-loader" style="display: none;">
+                            <svg class="spinner" viewBox="0 0 24 24">
+                                ircle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Segurança -->
+            <div class="perfil-section-card security-card">
+                <div class="section-card-header">
+                    <div class="section-title-group">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </div>
+                        <h3>Segurança</h3>
+                    </div>
+                </div>
+                <div class="section-card-body">
+                    <button class="security-action-btn" id="changePasswordBtn">
+                        <div class="security-action-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <div class="security-action-info">
+                            <span class="security-action-title">Alterar Senha</span>
+                            <span class="security-action-desc">Atualize sua senha regularmente</span>
+                        </div>
+                        <svg class="security-action-arrow" viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                    <button class="security-action-btn danger-btn" id="deleteAccountBtn">
+                        <div class="security-action-icon">
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="security-action-info">
+                            <span class="security-action-title">Excluir Conta</span>
+                            <span class="security-action-desc">Remover permanentemente sua conta</span>
+                        </div>
+                        <svg class="security-action-arrow" viewBox="0 0 24 24">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modais continuam iguais -->
+    <div class="modal-overlay" id="passwordModal" style="display: none;">
+        <div class="modal-content perfil-modal">
+            <div class="modal-header">
+                <h3>
+                    <svg viewBox="0 0 24 24" class="modal-icon">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Alterar Senha
+                </h3>
+                <button class="close-modal" id="closePasswordModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="currentPassword">Senha Atual:</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" required>
+                    <div class="password-strength" id="passwordStrength">
+                        <div class="strength-bar"></div>
+                        <span class="strength-text"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Nova Senha:</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="savePasswordBtn">Alterar Senha</button>
+                <button class="btn btn-secondary" id="cancelPasswordBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="supportModal" style="display: none;">
+        <div class="modal-content perfil-modal">
+            <div class="modal-header">
+                <h3>
+                    <svg viewBox="0 0 24 24" class="modal-icon">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    Contato com Suporte
+                </h3>
+                <button class="close-modal" id="closeSupportModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-info">
+                    <div class="support-item">
+                        <strong>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            E-mail:
+                        </strong>
+                        <span>suporte@aquaflux.com</span>
+                    </div>
+                    <div class="support-item">
+                        <strong>
+                            <svg viewBox="0 0 24 24">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            WhatsApp:
+                        </strong>
+                        <span>(11) 9999-9999</span>
+                    </div>
+                    <div class="support-item">
+                        <strong>
+                            <svg viewBox="0 0 24 24">
+                                ircle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Horário:
+                        </strong>
+                        <span>Segunda a Sexta, 8h às 18h</span>
+                    </div>
+                </div>
+                <div class="support-form">
+                    <h4>Ou envie uma mensagem:</h4>
+                    <div class="form-group">
+                        <label for="supportSubject">Assunto:</label>
+                        <select id="supportSubject">
+                            <option value="data-change">Alteração de Dados Pessoais</option>
+                            <option value="account-issue">Problema na Conta</option>
+                            <option value="technical">Suporte Técnico</option>
+                            <option value="billing">Questões Financeiras</option>
+                            <option value="other">Outros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="supportMessage">Mensagem:</label>
+                        <textarea id="supportMessage" rows="4" placeholder="Descreva sua solicitação..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="sendSupportBtn">Enviar Mensagem</button>
+                <button class="btn btn-secondary" id="cancelSupportBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+        <!-- ========== BOMBAS ========== -->
+        <div id="bombas" class="content-section">
+  <!-- BOMBAS - MONITORAMENTO E CONTROLE -->
+<!-- ========================================
+     SEÇÃO: DISPOSITIVOS ESP
+
+<section id="bombas" class="content-section esp-page">
+    HEADER DA SEÇÃO -->
+    <div class="section-header">
+        <div class="header-left">
+            <div class="header-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="8" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="14" y="2" width="8" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="2" y="14" width="8" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="14" y="14" width="8" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h1>Dispositivos ESP</h1>
+                <p>Gerencie seus dispositivos IoT e agendamentos de irrigação</p>
+            </div>
+        </div>
+        <button class="btn-primary" id="addDeviceBtn">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round"/>
+                <line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round"/>
+            </svg>
+            Novo Dispositivo
+        </button>
+    </div>
+
+    <!-- ESTATÍSTICAS -->
+    <div class="stats-grid">
+        <div class="stat-card primary">
+            <div class="stat-header">
+                <div class="stat-icon">📡</div>
+                <div class="stat-info">
+                    <h3>Dispositivos Ativos</h3>
+                    <div class="stat-value" id="activeDevices">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card success">
+            <div class="stat-header">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3>Total de Dispositivos</h3>
+                    <div class="stat-value" id="totalDevices">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card warning">
+            <div class="stat-header">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-info">
+                    <h3>Agendamentos Ativos</h3>
+                    <div class="stat-value" id="activeSchedules">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stat-card info">
+            <div class="stat-header">
+                <div class="stat-icon">💧</div>
+                <div class="stat-info">
+                    <h3>Vazão Total (L/min)</h3>
+                    <div class="stat-value" id="totalFlow">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="main-layout">
+        <!-- LISTA DE DISPOSITIVOS -->
+        <div class="section-box">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="20" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="2" y="14" width="20" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="6" y1="6" x2="6.01" y2="6" stroke-linecap="round"/>
+                    <line x1="6" y1="18" x2="6.01" y2="18" stroke-linecap="round"/>
+                </svg>
+                Meus Dispositivos
+            </div>
+            <div class="section-content">
+                <div class="devices-list" id="devicesGrid">
+                    <!-- Dispositivos serão inseridos aqui via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIGURAÇÃO DO DISPOSITIVO -->
+        <div class="section-box">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    ircle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 1v6m0 6v6M1 12h6m6 0h6" stroke-linecap="round"/>
+                    <path d="m4.22 4.22 4.24 4.24m7.08 7.08 4.24 4.24M19.78 4.22l-4.24 4.24M9.46 9.46 5.22 5.22" stroke-linecap="round"/>
+                </svg>
+                Configuração Selecionada
+            </div>
+            <div class="section-content">
+                <div class="config-panel">
+                    <div class="form-group">
+                        <label for="selectedDevice">Dispositivo</label>
+                        <select id="selectedDevice" class="form-input">
+                            <option value="">Selecione um dispositivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceName">
+                            
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
+                                ircle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Nome do Dispositivo
+                        </label>
+                        <input type="text" class="form-input" id="deviceName" placeholder="Ex: Bomba Principal" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2" y="2" width="20" height="20" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M7 7h.01M7 12h.01M7 17h.01M12 7h5M12 12h5M12 17h5" stroke-linecap="round"/>
+                                </svg>
+                                ID do ESP
+                            </label>
+                            <input type="text" class="form-input" id="" placeholder="ESP-001" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="waterFlow">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Vazão (L/min)
+                            </label>
+                            <input type="number" class="form-input" id="waterFlow" placeholder="15" min="0" step="0.1" required>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success" id="saveConfigBtn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Salvar Alterações
+                        </button>
+                        <button type="button" class="btn btn-danger" id="deleteDeviceBtn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="3 6 5 6 21 6" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Excluir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGENDAMENTOS DE IRRIGAÇÃO -->
+    <div class="section-box schedules-section">
+        <div class="section-content">
+            <div class="schedules-header">
+                <h2>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="4" width="18" height="18" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round"/>
+                        <line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round"/>
+                        <line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round"/>
+                    </svg>
+                    Agendamentos de Irrigação
+                </h2>
+                <button class="btn-primary" id="addScheduleBtn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="12" y1="5" x2="12" y2="19" stroke-linecap="round"/>
+                        <line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round"/>
+                    </svg>
+                    Novo Agendamento
+                </button>
+            </div>
+            <div class="schedules-grid" id="schedulesList">
+                <!-- Agendamentos serão inseridos aqui via JavaScript -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>(function() {
+    'use strict';
+    
+    // ========================================
+    // EXPANDIR/MINIMIZAR CARDS - CORRIGIDO
+    // ========================================
+    
+    function initExpandableCards() {
+        const devicesGrid = document.getElementById('devicesGrid');
+        if (!devicesGrid) return;
+        
+        devicesGrid.addEventListener('click', function(e) {
+            const card = e.target.closest('.device-card');
+            
+            // Se não clicou em um card, retornar
+            if (!card) return;
+            
+            // Se clicou em um botão, não fazer nada
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                return;
+            }
+            
+            // Prevenir cliques durante animação
+            if (card.classList.contains('animating')) return;
+            
+            // Marcar como em animação
+            card.classList.add('animating');
+            
+            // Fechar outros cards
+            const allCards = devicesGrid.querySelectorAll('.device-card');
+            allCards.forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('expanded');
+                }
+            });
+            
+            // Toggle este card
+            card.classList.toggle('expanded');
+            
+            // Remover flag após animação
+            setTimeout(() => {
+                card.classList.remove('animating');
+            }, 400);
+        });
+    }
+    
+    // ========================================
+    // INDICADORES DE SCROLL
+    // ========================================
+    
+    function initScrollIndicators() {
+        const sectionContent = document.querySelector('.section-content');
+        if (!sectionContent) return;
+        
+        function updateScrollIndicators() {
+            const scrollTop = sectionContent.scrollTop;
+            const scrollHeight = sectionContent.scrollHeight;
+            const clientHeight = sectionContent.clientHeight;
+            
+            // Sombra superior
+            if (scrollTop > 20) {
+                sectionContent.classList.add('scrolled');
+            } else {
+                sectionContent.classList.remove('scrolled');
+            }
+            
+            // Sombra inferior
+            if (scrollTop + clientHeight < scrollHeight - 20) {
+                sectionContent.classList.add('has-more');
+            } else {
+                sectionContent.classList.remove('has-more');
+            }
+        }
+        
+        sectionContent.addEventListener('scroll', updateScrollIndicators);
+        updateScrollIndicators();
+        
+        // Verificar após carregar dispositivos
+        setTimeout(updateScrollIndicators, 500);
+        
+        // Observar mudanças
+        const observer = new MutationObserver(updateScrollIndicators);
+        const devicesGrid = document.getElementById('devicesGrid');
+        if (devicesGrid) {
+            observer.observe(devicesGrid, { 
+                childList: true, 
+                subtree: true 
+            });
+        }
+    }
+    
+    // ========================================
+    // INICIALIZAR QUANDO O DOM ESTIVER PRONTO
+    // ========================================
+    
+    function init() {
+        console.log('Inicializando cards expansíveis...');
+        initExpandableCards();
+        initScrollIndicators();
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    
+    // Se houver conflito com outro JS, tente também:
+    window.addEventListener('load', function() {
+        setTimeout(init, 100);
+    });
+})();
+(function() {
+    'use strict';
+    
+    function initExpandableCards() {
+        const devicesGrid = document.getElementById('devicesGrid');
+        if (!devicesGrid) return;
+        
+        devicesGrid.addEventListener('click', function(e) {
+            const card = e.target.closest('.device-card');
+            
+            if (!card) return;
+            
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                return;
+            }
+            
+            if (card.classList.contains('animating')) return;
+            
+            // Marcar como em animação
+            card.classList.add('animating');
+            
+            // Verificar se já está expandido
+            const isExpanded = card.classList.contains('expanded');
+            
+            // Fechar outros cards COM ANIMAÇÃO
+            const allCards = devicesGrid.querySelectorAll('.device-card');
+            allCards.forEach(c => {
+                if (c !== card && c.classList.contains('expanded')) {
+                    c.classList.add('collapsing');
+                    setTimeout(() => {
+                        c.classList.remove('expanded', 'collapsing');
+                    }, 400);
+                }
+            });
+            
+            // Toggle este card
+            if (isExpanded) {
+                // Colapsando
+                card.classList.add('collapsing');
+                setTimeout(() => {
+                    card.classList.remove('expanded', 'collapsing', 'animating');
+                }, 400);
+            } else {
+                // Expandindo
+                card.classList.add('expanded');
+                setTimeout(() => {
+                    card.classList.remove('animating');
+                }, 500);
+            }
+        });
+    }
+    
+    function initScrollIndicators() {
+        const sectionContent = document.querySelector('.section-content');
+        if (!sectionContent) return;
+        
+        function updateScrollIndicators() {
+            const scrollTop = sectionContent.scrollTop;
+            const scrollHeight = sectionContent.scrollHeight;
+            const clientHeight = sectionContent.clientHeight;
+            
+            if (scrollTop > 20) {
+                sectionContent.classList.add('scrolled');
+            } else {
+                sectionContent.classList.remove('scrolled');
+            }
+            
+            if (scrollTop + clientHeight < scrollHeight - 20) {
+                sectionContent.classList.add('has-more');
+            } else {
+                sectionContent.classList.remove('has-more');
+            }
+        }
+        
+        sectionContent.addEventListener('scroll', updateScrollIndicators);
+        updateScrollIndicators();
+        
+        setTimeout(updateScrollIndicators, 500);
+        
+        const observer = new MutationObserver(updateScrollIndicators);
+        const devicesGrid = document.getElementById('devicesGrid');
+        if (devicesGrid) {
+            observer.observe(devicesGrid, { 
+                childList: true, 
+                subtree: true 
+            });
+        }
+    }
+    
+    function init() {
+        initExpandableCards();
+        initScrollIndicators();
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+
+</script>
+
+<!-- MODAL DISPOSITIVO -->
+<div class="modal-overlay" id="deviceModal">
+    <div class="modal" id="AD">
+        <div class="modal-header">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="20" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="2" y="14" width="20" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="deviceModalTitle">Adicionar Dispositivo</span>
+            </h2>
+            <button class="close-modal" id="closeDeviceModal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <form class="config-form">
+                <div class="form-group">
+                    <label for="newDeviceName">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke-linecap="round" stroke-linejoin="round"/>
+                            ircle cx="12" cy="7" r="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Nome do Dispositivo
+                    </label>
+                    <input type="text" class="form-input" id="newDeviceName" placeholder="Ex: Bomba Principal" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="deviceId">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="2" width="20" height="20" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M7 7h.01M7 12h.01M7 17h.01M12 7h5M12 12h5M12 17h5" stroke-linecap="round"/>
+                            </svg>
+                            ID do ESP
+                        </label>
+                        <input type="text" class="form-input" id="deviceId" placeholder="ESP-001" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deviceLocation">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                                ircle cx="12" cy="10" r="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Localização
+                        </label>
+                        <input type="text" class="form-input" id="deviceLocation" placeholder="Ex: Jardim frontal">
+                    </div>
+                </div>
+            </form>
+        </div>
+          <div class="modal-footer">
+                <button class="btn-secondary" id="cancelDeviceBtn" onclick="closeDeviceModal()">Cancelar</button>
+                   <button class="btn-primary" id="addDeviceConfirm" onclick="addDevice()">Adicionar Dispositivo</button>
+                   
+            </div>
+    </div>
+</div>
+
+
+
+<!-- MODAL AGENDAMENTO -->
+<div class="modal-overlay" id="scheduleModal">
+    <div class="modal" id="NA">
+        <div class="modal-header">
+            <h2>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="4" width="18" height="18" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round"/>
+                    <line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round"/>
+                    <line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round"/>
+                </svg>
+                <span id="modalTitle">Novo Agendamento</span>
+            </h2>
+            <button class="close-modal" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <form class="config-form">
+                <div class="form-group">
+                    <label for="scheduleDevice">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="8" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Dispositivo
+                    </label>    
+                    <select class="form-input" id="scheduleDevice" required>
+                        <option value="">Selecione um dispositivo</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="scheduleStart">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                ircle cx="12" cy="12" r="10" stroke-linecap="round"/>
+                                <polyline points="12 6 12 12 16 14" stroke-linecap="round"/>
+                            </svg>
+                            Hora de Início
+                        </label>
+                        <input type="time" class="form-input" id="scheduleStart" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scheduleEnd">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                ircle cx="12" cy="12" r="10" stroke-linecap="round"/>
+                                <polyline points="12 6 12 12 16 14" stroke-linecap="round"/>
+                            </svg>
+                            Hora de Término
+                        </label>
+                        <input type="time" class="form-input" id="scheduleEnd" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="4" width="18" height="18" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Dias da Semana
+                    </label>
+                    <div class="days-selector">
+                        <label class="day-checkbox"><input type="checkbox" value="0"/>Dom</label>
+                        <label class="day-checkbox"><input type="checkbox" value="1"/>Seg</label>
+                        <label class="day-checkbox"><input type="checkbox" value="2"/>Ter</label>
+                        <label class="day-checkbox"><input type="checkbox" value="3"/>Qua</label>
+                        <label class="day-checkbox"><input type="checkbox" value="4"/>Qui</label>
+                        <label class="day-checkbox"><input type="checkbox" value="5"/>Sex</label>
+                        <label class="day-checkbox"><input type="checkbox" value="6"/>Sáb</label>
+                    </div>
+                </div>
+
+                
+               <!-- Agendamento Ativo - Sem checkbox nativo visível -->
+<div class="schedule-active-container" onclick="toggleScheduleActive(this)">
+    <input type="checkbox" id="schedule-active" style="display: none;" />
+    
+    <div class="schedule-active-label">
+        <strong>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                ircle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+            </svg>
+            Agendamento Ativo
+        </strong>
+        <small>Ative para executar automaticamente</small>
+    </div>
+    
+    <div class="custom-toggle"></div>
+    
+    <span class="schedule-status-badge inactive">Inativo</span>
+</div>
+<script>function toggleScheduleActive(container) {
+    const checkbox = container.querySelector('#schedule-active');
+    const badge = container.querySelector('.schedule-status-badge');
+    
+    // Toggle checkbox
+    checkbox.checked = !checkbox.checked;
+    
+    // Atualizar visual
+    if (checkbox.checked) {
+        container.classList.add('active');
+        badge.textContent = 'Ativo';
+        badge.classList.remove('inactive');
+        badge.classList.add('active');
+    } else {
+        container.classList.remove('active');
+        badge.textContent = 'Inativo';
+        badge.classList.remove('active');
+        badge.classList.add('inactive');
+    }
+}
+</script>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" id="cancelScheduleBtn">Cancelar</button>
+            <button class="btn-primary" id="saveScheduleBtn">Salvar Agendamento</button>
+        </div>
+    </div>
+</div>
+
+        </div>
+
+        <!-- ========== CONFIGURAÇÕES ========== -->
+        <div id="configuracoes" class="content-section">
+            <div class="header">
+                <div class="header-content">
+                    <div class="header-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>ircle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div class="header-text">
+                        <h2>Configurações</h2>
+                        <p>Personalize sua experiência</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-bottom: 20px;">
+                <h3 style="margin-bottom: 20px;">Aparência:</h3>
+                
+                <div class="theme-section">
+                    <h4>MODO DE EXIBIÇÃO</h4>
+                    <div class="theme-buttons">
+                        <button class="theme-btn active" data-mode="light">☀️ Modo Claro</button>
+                        <button class="theme-btn" data-mode="dark">🌙 Modo Escuro</button>
+                    </div>
+                </div>
+
+                <div class="theme-section">
+                    <h4>ESQUEMA DE CORES</h4>
+                    <div class="color-grid">
+                        <button class="color-btn active" data-color="blue">
+                            <div class="color-btn
+                                                <button class="color-btn active" data-color="blue">
+                            <div class="color-btn-header">Azul Oceano</div>
+                            <div class="color-preview" style="background: linear-gradient(180deg, #4b81c9 0%, #1f5db0 100%);">
+                                <div class="color-preview-icon">
+                                    <div class="color-preview-icon-inner" style="background: #4b81c9;"></div>
+                                </div>
+                                <div class="color-preview-content">
+                                    <div class="color-preview-bar" style="background: #4b81c9; flex: 2;"></div>
+                                    <div class="color-preview-bar" style="background: #1f5db0; flex: 1;"></div>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="color-btn" data-color="green">
+                            <div class="color-btn-header">Verde Natureza</div>
+                            <div class="color-preview" style="background: linear-gradient(180deg, #4a9277 0%, #2d7a5f 100%);">
+                                <div class="color-preview-icon">
+                                    <div class="color-preview-icon-inner" style="background: #4a9277;"></div>
+                                </div>
+                                <div class="color-preview-content">
+                                    <div class="color-preview-bar" style="background: #4a9277; flex: 2;"></div>
+                                    <div class="color-preview-bar" style="background: #2d7a5f; flex: 1;"></div>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="color-btn" data-color="cyan">
+                            <div class="color-btn-header">Ciano Aquático</div>
+                            <div class="color-preview" style="background: linear-gradient(180deg, #3d8fa3 0%, #2a6d7f 100%);">
+                                <div class="color-preview-icon">
+                                    <div class="color-preview-icon-inner" style="background: #3d8fa3;"></div>
+                                </div>
+                                <div class="color-preview-content">
+                                    <div class="color-preview-bar" style="background: #3d8fa3; flex: 2;"></div>
+                                    <div class="color-preview-bar" style="background: #2a6d7f; flex: 1;"></div>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="color-btn" data-color="teal">
+                            <div class="color-btn-header">Teal Sereno</div>
+                            <div class="color-preview" style="background: linear-gradient(180deg, #42968b 0%, #2e7a70 100%);">
+                                <div class="color-preview-icon">
+                                    <div class="color-preview-icon-inner" style="background: #42968b;"></div>
+                                </div>
+                                <div class="color-preview-content">
+                                    <div class="color-preview-bar" style="background: #42968b; flex: 2;"></div>
+                                    <div class="color-preview-bar" style="background: #2e7a70; flex: 1;"></div>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="color-btn" data-color="purple">
+                            <div class="color-btn-header">Roxo Místico</div>
+                            <div class="color-preview" style="background: linear-gradient(180deg, #7264a3 0%, #594d85 100%);">
+                                <div class="color-preview-icon">
+                                    <div class="color-preview-icon-inner" style="background: #7264a3;"></div>
+                                </div>
+                                <div class="color-preview-content">
+                                    <div class="color-preview-bar" style="background: #7264a3; flex: 2;"></div>
+                                    <div class="color-preview-bar" style="background: #594d85; flex: 1;"></div>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="color-btn" data-color="pink">
+                            <div class="color-btn-header">Rosa Sunset</div>
+                            <div class="color-preview" style="background: linear-gradient(180deg, #b56a8f 0%, #944f73 100%);">
+                                <div class="color-preview-icon">
+                                    <div class="color-preview-icon-inner" style="background: #b56a8f;"></div>
+                                </div>
+                                <div class="color-preview-content">
+                                    <div class="color-preview-bar" style="background: #b56a8f; flex: 2;"></div>
+                                    <div class="color-preview-bar" style="background: #944f73; flex: 1;"></div>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- TERRA IA - ASSISTENTE AQUAFLUX -->
+<section id="terra-ia" class="content-section">
+    <div class="header terra-ia-header">
+        <div class="header-content">
+            <div class="header-icon terra">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M2 12h20"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h2>Terra IA</h2>
+                <p>Seu assistente especializado em irrigação e agricultura sustentável.</p>
+            </div>
+        </div>
+        <div class="header-badge terra"> Assistente IA</div>
+    </div>
+
+    <!-- Container Principal do Chat -->
+    <div class="terra-chat-wrapper">
+        <!-- Sidebar de Conversas -->
+       <!-- Sidebar FIXA - SEM botão + -->
+<aside class="terra-sidebar">
+    <div class="terra-sidebar-header">
+        <div class="terra-logo-sidebar">
+            <div class="logo-icon-sidebar">🌍</div>
+            <div class="logo-text-sidebar">Terra IA</div>
+        </div>
+    </div>
+    
+    <div class="conversations-section">
+        <h3>Conversas Recentes</h3>
+        <div class="conversations-list" id="conversationsList">
+            <!-- Conversas serão carregadas aqui -->
+        </div>
+    </div>
+    
+    <div class="sidebar-footer-terra">
+        <button id="newChatMobile" class="new-chat-mobile">✨ Nova Conversa</button>
+    </div>
+</aside>
+
+
+        <!-- Área Principal do Chat -->
+        <main class="terra-chat-main">
+            <div class="chat-messages" id="chatMessages">
+                <!-- Tela de Boas-vindas -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-content">
+                        <!-- Logo Planeta Terra SEMPRE VISÍVEL -->
+                        <div class="terra-avatar-big">
+                            <div class="terra-globe">
+                                <div class="meridian"></div>
+                                <div class="meridian"></div>
+                                <div class="meridian"></div>
+                                <div class="equator"></div>
+                                <span class="globe-emoji">🌍</span>
+                            </div>
+                        </div>
+                        
+                        <h2>Olá! Eu sou o Terra IA 🌱</h2>
+                        <p>Seu assistente especializado em irrigação inteligente, agricultura sustentável e gestão eficiente de recursos hídricos. Estou aqui para ajudar você a otimizar seu sistema AquaFlux!</p>
+
+                        <div class="suggested-topics">
+                            <h3>Perguntas Populares</h3>
+                            <div class="topics-grid">
+                                <button class="topic-btn" data-topic="Como calcular a vazão ideal para meu sistema de irrigação?">
+                                    <div class="topic-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="topic-text">Como calcular a vazão ideal do sistema?</div>
+                                </button>
+                                
+                                <button class="topic-btn" data-topic="Qual o melhor horário para irrigar minhas plantas?">
+                                    <div class="topic-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12 6 12 12 16 14"/>
+                                        </svg>
+                                    </div>
+                                    <div class="topic-text">Qual o melhor horário para irrigar?</div>
+                                </button>
+                                
+                                <button class="topic-btn" data-topic="Como economizar água com irrigação inteligente?">
+                                    <div class="topic-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M12 2v4"/>
+                                            <path d="M12 18v4"/>
+                                            <path d="M4.93 4.93l2.83 2.83"/>
+                                            <path d="M16.24 16.24l2.83 2.83"/>
+                                            <path d="M2 12h4"/>
+                                            <path d="M18 12h4"/>
+                                            <path d="M4.93 19.07l2.83-2.83"/>
+                                            <path d="M16.24 7.76l2.83-2.83"/>
+                                        </svg>
+                                    </div>
+                                    <div class="topic-text">Como economizar água eficientemente?</div>
+                                </button>
+                                
+                                <button class="topic-btn" data-topic="Quais sensores devo usar no meu sistema IoT?">
+                                    <div class="topic-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                                            <line x1="6" y1="6" x2="6.01" y2="6"/>
+                                            <line x1="6" y1="18" x2="6.01" y2="18"/>
+                                        </svg>
+                                    </div>
+                                    <div class="topic-text">Quais sensores usar no sistema?</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Container de Mensagens -->
+                <div class="messages-container" id="messagesContainer" style="display: none;">
+                    <!-- Mensagens aparecerão aqui -->
+                </div>
+            </div>
+
+            <!-- Área de Input -->
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <textarea id="messageInput" placeholder="Digite sua mensagem sobre irrigação, bombas ou agricultura..." rows="1"></textarea>
+                    <button id="sendBtn" class="send-btn" disabled>
+                        <span class="send-icon"></span>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <small>Terra IA - Especialista em irrigação e agricultura sustentável</small>
+                </div>
+            </div>
+        </main>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script type="module">
+        // ========== FIREBASE CONFIG ==========
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+        import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBycnpeGWw-ecRDXLxdOr_NAMhfQzLWwp4",
+            authDomain: "aqua-flux.firebaseapp.com",
+            databaseURL: "https://aqua-flux-default-rtdb.firebaseio.com",
+            projectId: "aqua-flux",
+            storageBucket: "aqua-flux.firebasestorage.app",
+            messagingSenderId: "188013221293",
+            appId: "1:188013221293:web:c98dc4ef68966f95677d24",
+            measurementId: "G-1651EB8ML3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+
+        try {
+            const appCheck = initializeAppCheck(app, {
+                provider: new ReCaptchaV3Provider('6LdmsvsrAAAAAKsOGim9zoPQxWCs6GxdEupSHelo'),
+                isTokenAutoRefreshEnabled: true
+            });
+        } catch (err) {
+            console.warn('AppCheck não inicializado:', err);
+        }
+
+        const database = getDatabase(app);
+
+        // ========== VARIÁVEIS GLOBAIS ==========
+        let currentUserData = null;
+        let firebaseUserData = null;
+        let userDevices = [];
+        let allHistory = [];
+        let charts = {};
+        let chartsInitialized = false;
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM carregado - Iniciando aplicação');
+
+            // Verificar login (para produção)
+            const userData = localStorage.getItem('aquaflux_user_data');
+            if (userData) {
+                try {
+                    currentUserData = JSON.parse(userData);
+                    console.log('Dados do usuário carregados:', currentUserData);
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário:', error);
+                }
+            }
+
+            initializeUI();
+            initializeNavigation();
+            initializeNotifications();
+            initializeTheme();
+            
+            // Carregar dados do Firebase se usuário logado
+            if (currentUserData) {
+                loadCompleteUserData();
+            }
+        });
+
+        // ========== INICIALIZAR UI ==========
+        function initializeUI() {
+            const userNameElement = document.getElementById('user-name');
+            if (userNameElement && currentUserData) {
+                userNameElement.textContent = currentUserData.nome || currentUserData.email || 'Usuário';
+            }
+
+            // Toggle do sistema
+            const systemToggle = document.getElementById('relaySwitch');
+            if (systemToggle) {
+                systemToggle.addEventListener('change', function() {
+                    this.classList.toggle('active');
+                    const statusLabel = document.getElementById('statusLabel');
+                    const statusDot = document.querySelector('.status-dot');
+                    const statusText = document.getElementById('statusText');
+                    
+                    if (this.checked) {
+                        statusLabel.textContent = 'LIGADO';
+                        statusLabel.classList.remove('offline');
+                        statusLabel.classList.add('active');
+                        if (statusDot) statusDot.classList.add('online');
+                        if (statusText) statusText.textContent = 'Esp_Casa Online';
+                    } else {
+                        statusLabel.textContent = 'DESLIGADO';
+                        statusLabel.classList.remove('active');
+                        statusLabel.classList.add('offline');
+                        if (statusDot) statusDot.classList.remove('online');
+                        if (statusText) statusText.textContent = 'Esp_Casa Offline';
+                    }
+                });
+            }
+
+            // Logout
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('aquaflux_user_data');
+                    showToast('Logout realizado com sucesso!', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
+                });
+            }
+
+            // Botões de período dos gráficos
+            document.querySelectorAll('.chart-period-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.chart-period-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // Atualizar gráfico baseado no período
+                    const period = this.dataset.period;
+                    console.log('Período selecionado:', period);
+                });
+            });
+
+            // Botão exportar
+            const exportBtn = document.getElementById('exportBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', () => {
+                    showToast('Exportando dados...', 'info');
+                    setTimeout(() => {
+                        showToast('Dados exportados com sucesso!', 'success');
+                    }, 2000);
+                });
+            }
+
+            // Botões de gerar relatório
+            document.querySelectorAll('.generate-report-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const type = this.dataset.type;
+                    showToast(`Gerando relatório ${type}...`, 'info');
+                    setTimeout(() => {
+                        showToast('Relatório gerado com sucesso!', 'success');
+                    }, 2000);
+                });
+            });
+
+            // Terra IA suggestions
+            document.querySelectorAll('.terra-suggestion').forEach(suggestion => {
+                suggestion.addEventListener('click', function() {
+                    const input = document.querySelector('.terra-input');
+                    if (input) {
+                        input.value = this.textContent.replace(/^[^\s]+\s/, '');
+                        input.focus();
+                    }
+                });
+            });
+
+            // Terra IA send
+            const terraSendBtn = document.querySelector('.terra-send-btn');
+            const terraInput = document.querySelector('.terra-input');
+            if (terraSendBtn && terraInput) {
+                terraSendBtn.addEventListener('click', () => {
+                    if (terraInput.value.trim()) {
+                        showToast('Terra IA está processando sua pergunta...', 'info');
+                        terraInput.value = '';
+                    }
+                });
+
+                terraInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && terraInput.value.trim()) {
+                        terraSendBtn.click();
+                    }
+                });
+            }
+        }
+
+        // ========== NAVEGAÇÃO ==========
+        function initializeNavigation() {
+            const menuItems = document.querySelectorAll('.menu-item[data-section]');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    menuItems.forEach(mi => mi.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const sectionId = this.dataset.section;
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === sectionId) {
+                            section.classList.add('active');
+                            
+                            // Inicializar gráficos quando a seção de dados for aberta
+                            if (sectionId === 'dados' && !chartsInitialized) {
+                                setTimeout(() => {
+                                    initializeCharts();
+                                    chartsInitialized = true;
+                                }, 100);
+                            }
+                        }
+                    });
+                });
+            });
+        }
+
+        // Função para navegar para Terra IA
+        window.navigateToTerra = function() {
+            const terraMenuItem = document.querySelector('.menu-item[data-section="terra-ia"]');
+            if (terraMenuItem) {
+                terraMenuItem.click();
+            }
+        };
+
+        // ========== NOTIFICAÇÕES ==========
+        function initializeNotifications() {
+            const bell = document.getElementById('notificationBell');
+            const panel = document.getElementById('notificationPanel');
+            const markAllRead = document.getElementById('markAllRead');
+            const badge = document.getElementById('notificationBadge');
+            const list = document.getElementById('notificationList');
+
+            const notifications = [
+                { type: 'success', title: 'Irrigação concluída', text: 'A irrigação automática foi finalizada com sucesso.', time: 'Há 5 minutos', unread: true },
+                { type: 'warning', title: 'Nível de água baixo', text: 'O reservatório principal está com 25% de capacidade.', time: 'Há 30 minutos', unread: true },
+                { type: 'info', title: 'Relatório disponível', text: 'O relatório mensal de novembro está pronto.', time: 'Há 2 horas', unread: true }
+            ];
+
+            if (list) {
+                list.innerHTML = notifications.map((n, i) => `
+                    <div class="notification-item ${n.unread ? 'unread' : ''}" data-index="${i}">
+                        <div class="notification-icon ${n.type}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                ${n.type === 'success' ? '<polyline points="20 6 9 17 4 12"/>' : 
+                                  n.type === 'warning' ? '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>' :
+                                  'ircle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>'}
+                            </svg>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">${n.title}</div>
+                            <div class="notification-text">${n.text}</div>
+                            <div class="notification-time">${n.time}</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (bell && panel) {
+                bell.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    panel.classList.toggle('active');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!panel.contains(e.target) && !bell.contains(e.target)) {
+                        panel.classList.remove('active');
+                    }
+                });
+            }
+
+            if (markAllRead && badge && list) {
+                markAllRead.addEventListener('click', () => {
+                    list.querySelectorAll('.notification-item').forEach(item => {
+                        item.classList.remove('unread');
+                    });
+                    badge.style.display = 'none';
+                    showToast('Todas as notificações foram marcadas como lidas', 'success');
+                });
+            }
+        }
+
+        // ========== TEMA ==========
+        function initializeTheme() {
+            const savedTheme = localStorage.getItem('aquaflux_theme') || 'light';
+            const savedColor = localStorage.getItem('aquaflux_color') || 'blue';
+
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+            if (savedColor !== 'blue') {
+                document.body.classList.add(`theme-${savedColor}`);
+            }
+
+            // Atualizar botões ativos
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === savedTheme);
+            });
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.color === savedColor);
+            });
+
+            // Event listeners
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const mode = this.dataset.mode;
+                    document.body.classList.toggle('dark-mode', mode === 'dark');
+                    localStorage.setItem('aquaflux_theme', mode);
+                    showToast(`Modo ${mode === 'dark' ? 'escuro' : 'claro'} ativado!`, 'success');
+                });
+            });
+
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const color = this.dataset.color;
+                    document.body.className = document.body.className.replace(/theme-\w+/g, '');
+                    if (color !== 'blue') {
+                        document.body.classList.add(`theme-${color}`);
+                    }
+                    localStorage.setItem('aquaflux_color', color);
+                    showToast('Tema de cores atualizado!', 'success');
+                });
+            });
+        }
+
+        // ========== CARREGAR DADOS FIREBASE ==========
+        async function loadCompleteUserData() {
+            console.log('Carregando dados do Firebase...');
+
+            try {
+                const userRef = ref(database, 'users/' + currentUserData.userId);
+                const snapshot = await get(userRef);
+
+                if (snapshot.exists()) {
+                    firebaseUserData = snapshot.val();
+                    console.log('Dados carregados:', firebaseUserData);
+
+                    await loadUserDevices();
+                    await loadAllHistory();
+                    processAndDisplayData();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            }
+        }
+
+        async function loadUserDevices() {
+            try {
+                const arduinosRef = ref(database, 'arduinos');
+                const snapshot = await get(arduinosRef);
+
+                if (snapshot.exists()) {
+                    const arduinos = snapshot.val();
+                    userDevices = [];
+
+                    Object.keys(arduinos).forEach(espId => {
+                        const esp = arduinos[espId];
+                        if (esp && esp.controlledBy === currentUserData.userId) {
+                            userDevices.push({
+                                id: espId,
+                                name: esp.deviceName || espId,
+                                online: !!esp.online,
+                                state: esp.state || false,
+                                lastSeen: esp.lastSeen || 0
+                            });
+                        }
+                    });
+
+                    console.log(`Dispositivos encontrados: ${userDevices.length}`);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar dispositivos:', error);
+            }
+        }
+
+        async function loadAllHistory() {
+            allHistory = [];
+
+            try {
+                const historyRef = ref(database, 'history');
+                const snapshot = await get(historyRef);
+
+                if (snapshot.exists()) {
+                    const historyData = snapshot.val();
+
+                    Object.keys(historyData).forEach(espId => {
+                        const userDevice = userDevices.find(device => device.id === espId);
+                        if (userDevice) {
+                            const espHistory = historyData[espId];
+                            Object.keys(espHistory).forEach(historyId => {
+                                const record = espHistory[historyId] || {};
+                                allHistory.push({
+                                    id: historyId,
+                                    espId: espId,
+                                    espName: userDevice.name,
+                                    data: record.data || '',
+                                    tempoLigado: record.tempoLigado || '00:00:00',
+                                    lm: Number(record.lm) || 0,
+                                    timestamp: parseDateTime(record.data || '', record.tempoLigado || '00:00:00')
+                                });
+                            });
+                        }
+                    });
+
+                    allHistory.sort((a, b) => b.timestamp - a.timestamp);
+                    console.log(`Registros carregados: ${allHistory.length}`);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+            }
+        }
+
+        function parseDateTime(dateStr, timeStr) {
+            try {
+                if (!dateStr) return Date.now();
+                const parts = dateStr.split('/');
+                if (parts.length !== 3) return Date.now();
+
+                const [day, month, year] = parts.map(Number);
+                const tParts = (timeStr || '00:00:00').split(':').map(Number);
+                return new Date(year, month - 1, day, tParts[0] || 0, tParts[1] || 0, tParts[2] || 0).getTime();
+            } catch (error) {
+                return Date.now();
+            }
+        }
+
+        function processAndDisplayData() {
+            const stats = calculateStatistics();
+            updateStatCards(stats);
+            updateHistoryTable();
+            
+            if (chartsInitialized) {
+                updateCharts(stats);
+            }
+        }
+
+        function calculateStatistics() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const thisWeekStart = new Date(today);
+            thisWeekStart.setDate(today.getDate() - today.getDay());
+            const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+
+            let stats = {
+                activationsMonth: 0,
+                activationsToday: 0,
+                timeToday: 0,
+                timeWeek: 0,
+                consumptionDaily: 0,
+                consumptionWeekly: 0,
+                consumptionMonthly: 0,
+                activationsByDay: Array(7).fill(0),
+                activationsByHour: Array(24).fill(0),
+                timeByDay: Array(7).fill(0)
+            };
+
+            allHistory.forEach(record => {
+                const recordDate = new Date(record.timestamp);
+                const timeParts = (record.tempoLigado || '00:00:00').split(':');
+                const timeMinutes = (parseInt(timeParts[0] || 0) || 0) * 60 + (parseInt(timeParts[1] || 0) || 0);
+                const consumption = (Number(record.lm) || 0) * timeMinutes;
+
+                if (recordDate >= thisMonthStart) {
+                    stats.activationsMonth++;
+                    stats.consumptionMonthly += consumption;
+                }
+
+                if (recordDate >= today) {
+                    stats.activationsToday++;
+                    stats.timeToday += timeMinutes;
+                    stats.consumptionDaily += consumption;
+                }
+
+                if (recordDate >= thisWeekStart) {
+                    stats.timeWeek += timeMinutes;
+                    stats.consumptionWeekly += consumption;
+                    const dayOfWeek = recordDate.getDay();
+                    stats.activationsByDay[dayOfWeek]++;
+                    stats.timeByDay[dayOfWeek] += timeMinutes;
+                }
+
+                const hour = recordDate.getHours();
+                if (!isNaN(hour) && hour >= 0 && hour < 24) {
+                    stats.activationsByHour[hour]++;
+                }
+            });
+
+            return stats;
+        }
+
+        function updateStatCards(stats) {
+            const elements = {
+                'totalActivationsMonth': stats.activationsMonth,
+                'activationsToday': stats.activationsToday,
+                'timeTodayMinutes': `${Math.round(stats.timeToday)}min`,
+                'timeWeekHours': `${(stats.timeWeek / 60).toFixed(1)}h`,
+                'dailyWaterConsumption': `${Math.round(stats.consumptionDaily)}L`,
+                'weeklyWaterConsumption': `${Math.round(stats.consumptionWeekly)}L`,
+                'monthlyWaterConsumption': `${Math.round(stats.consumptionMonthly)}L`,
+                'estimatedCost': `R$ ${((stats.consumptionMonthly / 1000) * 3.50).toFixed(2)}`
+            };
+
+            Object.entries(elements).forEach(([id, value]) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            });
+        }
+
+        // ========== GRÁFICOS ==========
+        function initializeCharts() {
+            console.log('Inicializando gráficos...');
+
+            const activationsCanvas = document.getElementById('activationsChart');
+            if (activationsCanvas) {
+                charts.activations = new Chart(activationsCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                        datasets: [{
+                            label: 'Ativações',
+                            data: Array(7).fill(0),
+                            backgroundColor: 'rgba(75, 129, 201, 0.8)',
+                            borderColor: 'rgba(75, 129, 201, 1)',
+                            borderWidth: 2,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                    }
+                });
+            }
+
+            const timeCanvas = document.getElementById('timeChart');
+            if (timeCanvas) {
+                charts.time = new Chart(timeCanvas, {
+                    type: 'line',
+                    data: {
+                        labels: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+                        datasets: [{
+                            label: 'Tempo (min)',
+                            data: Array(7).fill(0),
+                            backgroundColor: 'rgba(75, 129, 201, 0.2)',
+                            borderColor: 'rgba(75, 129, 201, 1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 5,
+                            pointBackgroundColor: 'rgba(75, 129, 201, 1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            }
+
+            const hourlyCanvas = document.getElementById('hourlyChart');
+            if (hourlyCanvas) {
+                charts.hour = new Chart(hourlyCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: Array.from({ length: 24 }, (_, i) => `${i}h`),
+                        datasets: [{
+                            label: 'Ativações',
+                            data: Array(24).fill(0),
+                            backgroundColor: 'rgba(75, 129, 201, 0.6)',
+                            borderColor: 'rgba(75, 129, 201, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                    }
+                });
+            }
+
+            const efficiencyCanvas = document.getElementById('efficiencyChart');
+            if (efficiencyCanvas) {
+                charts.efficiency = new Chart(efficiencyCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Sucesso', 'Falhas'],
+                        datasets: [{
+                            data: [98, 2],
+                            backgroundColor: ['rgba(16, 185, 129, 0.8)', 'rgba(239, 68, 68, 0.8)'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom' } }
+                    }
+                });
+            }
+
+            // Atualizar com dados reais se existirem
+            if (allHistory.length > 0) {
+                const stats = calculateStatistics();
+                updateCharts(stats);
+            }
+        }
+
+        function updateCharts(stats) {
+            if (charts.activations) {
+                charts.activations.data.datasets[0].data = stats.activationsByDay;
+                charts.activations.update();
+            }
+
+            if (charts.time) {
+                charts.time.data.datasets[0].data = stats.timeByDay;
+                charts.time.update();
+            }
+
+            if (charts.hour) {
+                charts.hour.data.datasets[0].data = stats.activationsByHour;
+                charts.hour.update();
+            }
+        }
+
+        function updateHistoryTable() {
+            const tableBody = document.getElementById('historyTableBody');
+            if (!tableBody) return;
+
+            tableBody.innerHTML = '';
+            const recentHistory = allHistory.slice(0, 50);
+
+            recentHistory.forEach(record => {
+                const row = document.createElement('tr');
+                const timeParts = (record.tempoLigado || '00:00:00').split(':');
+                const timeMinutes = (parseInt(timeParts[0] || 0) || 0) * 60 + (parseInt(timeParts[1] || 0) || 0);
+                const consumption = Math.round((Number(record.lm) || 0) * timeMinutes);
+
+                row.innerHTML = `
+                    <td>${record.data} ${record.tempoLigado}</td>
+                    <td><span class="device-badge">${record.espName}</span></td>
+                    <td><span class="action-badge action-on">Ligado</span></td>
+                    <td>${record.tempoLigado}</td>
+                    <td>${consumption}L</td>
+                    <td><span class="origin-badge">ESP</span></td>
+                    <td><span class="status-badge status-success">✓</span></td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // ========== TOAST ==========
+        function showToast(message, type = 'info', title = null, duration = 5000) {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+
+            const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+            const defaultTitles = { success: 'Sucesso!', error: 'Erro!', warning: 'Atenção!', info: 'Informação' };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">${icons[type] || icons.info}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title || defaultTitles[type]}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close">×</button>
+            `;
+
+            container.appendChild(toast);
+
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', () => removeToast(toast));
+
+            if (duration > 0) {
+                setTimeout(() => removeToast(toast), duration);
+            }
+
+            return toast;
+        }
+        function removeToast(toast) {
+            toast.classList.add('removing');
+            setTimeout(() => {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 300);
+        }
+
+        // Expor função globalmente
+        window.showToast = showToast;
+
+        console.log('✅ Dashboard AquaFlux carregado com sucesso!');
+    </script>
+    <script type="module" src="javascript/home.js"></script>
+     <script type="module" src="javascript/pump-scheduler.js"></script>
+     <script type="module" src="javascript/dados.js"></script>
+     <script type="module" src="javascript/infouser.js"></script>
+     <script type="module" src="javascript/ia.js"></script>
+     <script type="module" src="javascript/relatorios.js"></script>
+
+
+
+
+</body>
+<!-- ANTES do </body>, adicione na ordem: -->
+
+<!-- Chart.js (já deve estar carregado) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<!-- Firebase Compat Mode -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js"></script>
+
+
+<!-- SCRIPT DE NAVEGAÇÃO (atualizar) -->
+<script>
+// Navegação entre seções
+document.querySelectorAll('.menu-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    const section = this.getAttribute('data-section');
+    
+    // Remover active de todas as seções
+    document.querySelectorAll('.content-section').forEach(s => {
+      s.classList.remove('active');
+    });
+    
+    // Remover active de todos os itens do menu
+    document.querySelectorAll('.menu-item').forEach(m => {
+      m.classList.remove('active');
+    });
+    
+    // Ativar seção e menu
+    const targetSection = document.getElementById(section);
+    if (targetSection) {
+      targetSection.classList.add('active');
+      this.classList.add('active');
+      
+      // IMPORTANTE: Chamar initializeDataSection quando clicar em Dados
+      if (section === 'dados' && typeof window.initializeDataSection === 'function') {
+        console.log("🚀 Chamando initializeDataSection()...");
+        window.initializeDataSection();
+      }
+    }
+  });
+});
+// Função global para enviar mensagem dos tópicos
+function sendTopicMessage(message) {
+    const messageInput = document.getElementById('messageInput');
+    if (messageInput && window.terraAI) {
+        messageInput.value = message;
+        // Trigger o envio através da classe TerraAIAssistant
+        window.terraAI.sendMessage();
+    }
+}
+
+</script>
+</html>
+

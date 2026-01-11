@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <noscript>
+        <style>
+        body { display: none; }
+        </style>
+        <meta http-equiv="refresh" content="0;url=/index.html">
+       </noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlux - Dashboard</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="icon" type="image/x-icon" href="img/logo.ico">
+</head>
+<body>
+    <!-- Header Principal -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-section">
+                
+               <a href="dashboard.html"><h1 class="main-title"><img class="FotoLogo1" src="img/logo2.png" alt="Logo AquaFlux"></h1></a> 
+            </div>  
+
+            <div class="user-section user-menu-block">
+    <a href="infoUsuarios.html" id="userEmail" class="userEmail user-link">Roronoa123@gmail.com</a>
+    <div class="user-avatar-wrapper">
+        <img class="user-avatar" src="img/Roronoa.png" alt="Avatar do Usuário" tabindex="0" />
+        <!-- Bloco de menu flutuante -->
+        <div class="user-dropdown-menu">
+            <button id="profileBtn">Acessar Perfil</button>
+            <button id="logoutBtn">Sair</button>
+        </div>
+    </div>
+</div>
+
+<script>// Direciona avatar para perfil
+document.querySelector('.user-avatar').addEventListener('click', function() {
+    window.location.href = 'infoUsuarios.html'; // ajuste para sua rota
+});
+
+// Acessa perfil pelo botão do menu
+document.getElementById('profileBtn').addEventListener('click', function() {
+    window.location.href = 'infoUsuarios.html';
+});
+document.getElementById('logoutBtn').addEventListener('click', function() {
+    // lógica de logout aqui
+    window.location.href = 'index.html  ';
+});
+
+
+</script>
+
+    </header>
+    <!-- Barra de notificação -->
+    <div class="notification-bar" id="welcomeMessage">
+        Bem-Vindo novamente ao sistema AquaFlux! Estamos às suas disposições, confira suas notificações aqui nesta barra.
+    </div>
+    <!-- Container principal usando flex -->
+    <main class="main-container new-layout">
+        
+        <div class="dashboard-flex">
+
+
+            <!-- Dados Ambientais Minimizados/Expandido -->
+            <div class="card-vertical card-minimized card-dados" tabindex="0">
+                <div class="card-vertical-icon">
+                    <img src="img/af_icon7.png" alt="icone de clima" />
+                </div>
+                <div class="card-vertical-title">D</div>
+                <div class="card-vertical-title">A</div>
+                <div class="card-vertical-title">D</div>
+                <div class="card-vertical-title">O</div>
+                <div class="card-vertical-title">S</div>
+                <!-- Bloco expandido ao hover/focus -->
+
+                
+                <div class="card-expanded card-dados-expanded">
+                    <h3 class="card-title"><img src="img/af_icon7.png" alt="icone de clima" />Dados Ambientais</h3>
+
+                      <div class="weather-forecast">
+                        <h4>Previsão para Hoje</h4>
+                        <div class="forecast-item">
+                            <img src="img/icon-sol.png" alt="icone de clima" class="forecast-icon" id="weatherIcon"/>
+                            <div class="forecast-info">
+                                <span class="forecast-desc" id="weatherDescription">Ensolarado</span>
+                                <span class="forecast-rain" id="rainChance">Chuva: 10%</span>
+                            </div>
+                            <div class="forecast-temp">
+                                <span id="maxTemp">28°</span>
+                                <span id="minTemp">18°</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="environmental-data">
+                        <div class="env-item">
+                            <img src="img/icon-temp.png"class="env-icon"/>
+                            <div class="env-info">
+                                <span class="env-label">Temperatura:</span>
+                                <span class="env-value" id="temperature">--°C</span>
+                            </div>
+                        </div>
+                        <div class="env-item">
+                            <img src="img/icon-vento.png"class="env-icon"/>
+                            <div class="env-info">
+                                <span class="env-label">Vento:</span>
+                                <span class="env-value" id="windSpeed">-- km/h</span>
+                            </div>
+                        </div>
+                        <div class="env-item">
+                            <img src="img/icon-gota.png"class="env-icon"/>
+                            <div class="env-info">
+                                <span class="env-label">Umidade:</span>
+                                <span class="env-value" id="humidity">--%</span>
+                            </div>
+                        </div>
+                        <div class="env-item">
+                            <img src="img/icon-press.png"class="env-icon"/>
+                            <div class="env-info">
+                                <span class="env-label">Pressão:</span>
+                                <span class="env-value" id="pressure">-- hPa</span>
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <div class="location-info">
+                        <span id="locationName">Obtendo localização...</span>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Status do Sistema Minimizados/Expandido -->
+            <div class="card-vertical card-minimized card-sistema" tabindex="0">
+                <div class="card-vertical-icon">
+                    <img src="img/af_icon8.png" alt="icone de sistema" />
+                </div>
+                <div class="card-vertical-title">S</div>
+                <div class="card-vertical-title">I</div>
+                <div class="card-vertical-title">S</div>
+                <div class="card-vertical-title">T</div>
+                <div class="card-vertical-title">E</div>
+                <div class="card-vertical-title">M</div>
+                <div class="card-vertical-title">A</div>
+                <div class="card-expanded card-sistema-expanded">
+                    <h3 class="card-title"><img src="img/af_icon8.png" alt="icone de sistema" />Status do Sistema</h3>
+                    <div class="system-status">
+                        <div class="esp-status" id="espStatus">
+                            <div class="status-dot offline" id="statusDot"></div>
+                            <span id="espStatusText">ESP8266 Offline</span>
+                        </div>
+                        <div class="last-seen" id="lastSeen">Aguardando conexão...</div>
+                        <div class="main-control">
+                            <label class="power-switch">
+                                <input type="checkbox" id="relaySwitch">
+                                <span class="switch-slider">
+                                    <span class="switch-button"></span>
+                                </span>
+                            </label>
+                            <div class="control-status">
+                                <span id="relayStatus" class="status-text off">DESLIGADO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Minimizados/Expandido -->
+            <div class="card-vertical card-minimized card-menu" tabindex="0">
+                <div class="card-vertical-icon">
+                    <img src="img/af_icon9.png" alt="icone de menu" />
+                </div>
+                <div class="card-vertical-title">M</div>
+                <div class="card-vertical-title">e</div>
+                <div class="card-vertical-title">n</div>
+                <div class="card-vertical-title">u</div>
+                <div class="card-expanded card-menu-expanded">
+                    <h3 class="card-title"><img src="img/af_icon9.png" alt="icone de menu" />Menu Principal</h3>
+                    <div class="menu-buttons">
+                        <button class="menu-btn" id="pumpConfigBtn">
+                            <img src="img/icon-engrenagem.png"class="btn-icon"/>
+                            <div class="btn-content">
+                                <span class="btn-title">Configuração de Bombas</span>
+                                <span class="btn-subtitle">Configure dispositivos e agendamentos</span>
+                            </div>
+                        </button>
+                        <button class="menu-btn" id="chartsBtn">
+                            <img src="img/icon-dados.png"class="btn-icon"/>
+                            <div class="btn-content">
+                                <span class="btn-title">Dados e Relatórios</span>
+                                <span class="btn-subtitle">Visualize estatísticas e histórico</span>
+                            </div>
+                        </button>
+                        <button class="menu-btn" id="terraBtn">
+                              <img src="img/icon-terraia.png"class="btn-icon"/>
+                            <div class="btn-content">
+                                <span class="btn-title">Terra - Assistente IA</span>
+                                <span class="btn-subtitle">Tire dúvidas sobre irrigação e agricultura</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="javascript/home.js"></script>
+</body>
+</html>

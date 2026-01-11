@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <noscript>
+     <style>
+     body { display: none; }
+     </style>
+     <meta http-equiv="refresh" content="0;url=/index.html">
+    </noscript>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AquaFlux - Bombas Agendamento</title>
+    <link rel="stylesheet" href="css/configbombas.css"/>
+    <link rel="icon" type="image/x-icon" href="img/logo.ico">
+</head>
+<body>
+    
+    <header class="page-header">
+        <div class="header-content">
+            <div class="nav-section">
+                <button class="back-btn" id="backBtn"><span>Voltar ao Dashboard</span></button>
+                <h1>Configuração de Bombas</h1>
+            </div>
+            <div class="user-info">
+                <span id="userName"></span>
+                <button class="logout-btn" id="logoutBtn">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    
+    <main class="main-content">
+        <section class="devices-section">
+            <h2>Seus Dispositivos</h2>
+            <div class="devices-grid" id="devicesGrid"></div>
+            <button class="add-device-btn" id="addDeviceBtn"><span>Adicionar Novo Dispositivo</span></button>
+        </section>
+        <section class="config-section">
+            <h2>Configuração Selecionada</h2>
+            <div class="config-grid">
+                <div class="config-card">
+                    <div class="form-group">
+                        <label for="selectedDevice">Dispositivo</label>
+                        <select id="selectedDevice">
+                            <option value="">Selecione um dispositivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceName">Nome</label>
+                        <input id="deviceName" type="text" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="waterFlow">Fluxo (L/min)</label>
+                        <input id="waterFlow" type="number" min="0.1" step="0.1" required />
+                    </div>
+                    <button id="saveConfigBtn" class="save-config-btn">Salvar Configurações</button>
+                </div>
+            </div>
+        </section>
+        <section class="schedule-section">
+            <h2>Agendamentos de Irrigação</h2>
+            <div class="schedule-controls">
+                <button class="add-schedule-btn" id="addScheduleBtn">Novo Agendamento</button>
+            </div>
+            <div class="schedules-list" id="schedulesList"></div>
+        </section>
+    </main>
+
+    <!-- Modal Agendamento -->
+    <div class="modal-overlay" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Novo Agendamento</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="scheduleDevice">Dispositivo</label>
+                    <select id="scheduleDevice" required>
+                        <option value="">Selecione um dispositivo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="scheduleStart">Horário de Início</label>
+                    <input type="time" id="scheduleStart" required />
+                </div>
+                <div class="form-group">
+                    <label for="scheduleEnd">Horário de Término</label>
+                    <input type="time" id="scheduleEnd" required />
+                </div>
+                <div class="form-group">
+                    <label>Dias da Semana</label>
+                    <div class="days-selector">
+                        <label class="day-checkbox"><input type="checkbox" value="0"/>Dom</label>
+                        <label class="day-checkbox"><input type="checkbox" value="1"/>Seg</label>
+                        <label class="day-checkbox"><input type="checkbox" value="2"/>Ter</label>
+                        <label class="day-checkbox"><input type="checkbox" value="3"/>Qua</label>
+                        <label class="day-checkbox"><input type="checkbox" value="4"/>Qui</label>
+                        <label class="day-checkbox"><input type="checkbox" value="5"/>Sex</label>
+                        <label class="day-checkbox"><input type="checkbox" value="6"/>Sáb</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="scheduleActive">Agendamento ativo</label>
+                    <input type="checkbox" id="scheduleActive" checked>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveScheduleBtn">Salvar</button>
+                <button class="btn btn-secondary" id="cancelScheduleBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Dispositivo -->
+    <div class="modal-overlay" id="deviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar Dispositivo</h3>
+                <button class="close-modal" id="closeDeviceModal" onclick="closeDeviceModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="newDeviceName">Nome do Dispositivo</label>
+                    <input type="text" id="newDeviceName" required />
+                </div>
+                <div class="form-group">
+                    <label for="deviceId">ID do Dispositivo</label>
+                    <input type="text" id="deviceId" required />
+                    <small>ID único para programar no ESP8266</small>
+                </div>
+                <div class="form-group">
+                    <label for="deviceLocation">Localização</label>
+                    <input type="text" id="deviceLocation" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="addDeviceConfirm" onclick="addDevice()">Adicionar Dispositivo</button>
+                <button class="btn btn-secondary" id="cancelDeviceBtn" onclick="closeDeviceModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="javascript/pump-scheduler.js"></script>
+</body>
+</html>

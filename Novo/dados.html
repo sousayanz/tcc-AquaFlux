@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script type="module" src="javascript/dados.js"></script>
+    <noscript>
+     <style>
+     body { display: none; }
+     </style>
+     <meta http-equiv="refresh" content="0;url=/index.html">
+    </noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlux - Gráficos e Dados</title>
+    <link rel="stylesheet" href="css/dados.css">
+    <link rel="icon" type="image/x-icon" href="img/logo.ico">
+</head>
+<body>
+    <!-- Header com navegação -->
+    <header class="page-header">
+        <div class="header-content">
+            <div class="nav-section">
+                <button class="back-btn" id="backBtn">
+                    <span>←</span> Voltar ao Dashboard
+                </button>
+                <h1>📈 Gráficos e Dados</h1>
+                <!-- Adicionei um local para exibir o nome do usuário -->
+                <div class="user-info">
+                    <span id="user-name"></span>
+                </div>
+            </div>
+            <div class="controls-section">
+                <select id="deviceFilter" class="filter-select">
+                    <option value="all">Todos os Dispositivos</option>
+                </select>
+                <select id="periodFilter" class="filter-select">
+                    <option value="today">Hoje</option>
+                    <option value="week">Esta Semana</option>
+                    <option value="month">Este Mês</option>
+                    <option value="custom">Período Personalizado</option>
+                </select>
+                <button class="export-btn" id="exportBtn">📊 Exportar Dados</button>
+                <button class="logout-btn" id="logoutBtn">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Estatísticas Resumo -->
+        <section class="stats-overview">
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-icon">🔄</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="totalActivationsMonth">0</div>
+                        <div class="stat-label">Ativações do Mês</div>
+                        <div class="stat-change" id="monthChange">+0%</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card success">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="activationsToday">0</div>
+                        <div class="stat-label">Ativações Hoje</div>
+                        <div class="stat-change" id="todayChange">+0</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card warning">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="timeTodayMinutes">0min</div>
+                        <div class="stat-label">Tempo Hoje</div>
+                        <div class="stat-change" id="timeChange">+0min</div>
+                    </div>
+                </div>
+                
+                <div class="stat-card info">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="timeWeekHours">0h</div>
+                        <div class="stat-label">Tempo da Semana</div>
+                        <div class="stat-change" id="weekTimeChange">+0h</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Consumo de Água -->
+        <section class="water-consumption-section">
+            <h2>💧 Estimativa de Consumo de Água</h2>
+            <div class="consumption-grid">
+                <div class="consumption-card">
+                    <h3>Consumo Diário</h3>
+                    <div class="consumption-value">
+                        <span id="dailyWaterConsumption">0L</span>
+                        <small>Estimativa baseada no tempo de irrigação</small>
+                    </div>
+                    <div class="consumption-chart" id="dailyConsumptionChart">
+                        <!-- Gráfico simples será gerado aqui -->
+                    </div>
+                </div>
+                
+                <div class="consumption-card">
+                    <h3>Consumo Semanal</h3>
+                    <div class="consumption-value">
+                        <span id="weeklyWaterConsumption">0L</span>
+                        <small>Últimos 7 dias</small>
+                    </div>
+                    <div class="consumption-breakdown">
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Irrigação Automática:</span>
+                            <span class="breakdown-value" id="autoConsumption">0L</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Irrigação Manual:</span>
+                            <span class="breakdown-value" id="manualConsumption">0L</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="consumption-card">
+                    <h3>Consumo Mensal</h3>
+                    <div class="consumption-value">
+                        <span id="monthlyWaterConsumption">0L</span>
+                        <small>Este mês</small>
+                    </div>
+                    <div class="cost-estimate">
+                        <p>Estimativa de Custo:</p>
+                        <span class="cost-value" id="estimatedCost">R$ 0,00</span>
+                        <small>Baseado em R$ 3,50/m³</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+       <!-- Gráfico de Ativações -->
+    <div class="chart-container">
+        <h3>📊 Ativações por Período</h3>
+        <div class="chart-controls">
+            <button class="chart-period-btn active" data-period="7d">7 Dias</button>
+            <button class="chart-period-btn" data-period="30d">30 Dias</button>
+            <button class="chart-period-btn" data-period="90d">90 Dias</button>
+        </div>
+        <div class="simple-chart" style="position: relative; height: 300px;">
+            <canvas id="activationsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Gráfico de Tempo de Uso -->
+    <div class="chart-container">
+        <h3>⏱️ Tempo de Irrigação Diário</h3>
+        <div class="time-chart" style="position: relative; height: 300px;">
+            <canvas id="timeChart"></canvas>
+        </div>
+        <div class="chart-legend">
+            <div class="legend-item">
+                <span class="legend-color auto"></span> Irrigação Automática
+            </div>
+            <div class="legend-item">
+                <span class="legend-color manual"></span> Irrigação Manual
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico de Distribuição por Horário -->
+    <div class="chart-container">
+        <h3>🕐 Distribuição por Horário</h3>
+        <div class="hourly-distribution" style="position: relative; height: 300px;">
+            <canvas id="hourlyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Gráfico de Eficiência Semanal -->
+    <div class="chart-container">
+        <h3>📈 Eficiência Semanal</h3>
+        <div class="efficiency-chart" style="position: relative; height: 300px;">
+            <canvas id="efficiencyChart"></canvas>
+        </div>
+        <div class="efficiency-metrics">
+            <div class="metric">
+                <span class="metric-label">Taxa de Sucesso:</span>
+                <span class="metric-value" id="successRate">98%</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Uptime:</span>
+                <span class="metric-value" id="uptime">99.2%</span>
+            </div>
+        </div>
+    </div>
+
+
+        <!-- Seção de Histórico Detalhado -->
+        <section class="history-section">
+            <h2>📋 Histórico Detalhado</h2>
+            <div class="history-controls">
+                <div class="search-box">
+                    <input type="text" id="searchHistory" placeholder="Buscar no histórico...">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="history-filters">
+                    <select id="actionFilter">
+                        <option value="all">Todas as Ações</option>
+                        <option value="auto">Irrigação Automática</option>
+                        <option value="manual">Irrigação Manual</option>
+                        <option value="schedule">Agendamento</option>
+                        <option value="config">Configuração</option>
+                    </select>
+                    <input type="date" id="dateFilter">
+                </div>
+            </div>
+            
+            <div class="history-table-container">
+                <table class="history-table" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Data/Hora</th>
+                            <th>Dispositivo</th>
+                            <th>Ação</th>
+                            <th>Duração</th>
+                            <th>Consumo Est.</th>
+                            <th>Origem</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Dados serão carregados dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination" id="historyPagination">
+                <!-- Paginação será gerada dinamicamente -->
+            </div>
+        </section>
+
+        <!-- Seção de Relatórios -->
+        <section class="reports-section">
+            <h2>📄 Relatórios</h2>
+            <div class="reports-grid">
+                <div class="report-card">
+                    <h3>📈 Relatório Mensal</h3>
+                    <p>Análise completa do uso mensal com gráficos e estatísticas detalhadas.</p>
+                    <button class="generate-report-btn" data-type="monthly">
+                        📄 Gerar Relatório
+                    </button>
+                </div>
+                
+                <div class="report-card">
+                    <h3>💰 Relatório de Custos</h3>
+                    <p>Estimativa de custos de água e análise de economia.</p>
+                    <button class="generate-report-btn" data-type="costs">
+                        💰 Gerar Relatório
+                    </button>
+                </div>
+                
+                <div class="report-card">
+                    <h3>🏆 Relatório de Performance</h3>
+                    <p>Análise de eficiência do sistema e recomendações.</p>
+                    <button class="generate-report-btn" data-type="performance">
+                        🏆 Gerar Relatório
+                    </button>
+                </div>
+                
+                <div class="report-card">
+                    <h3>📊 Relatório Customizado</h3>
+                    <p>Configure seu próprio relatório com métricas personalizadas.</p>
+                    <button class="generate-report-btn" data-type="custom">
+                        ⚙️ Configurar
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modais (sem alteração importante) -->
+    <div class="modal-overlay" id="customPeriodModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📅 Período Personalizado</h3>
+                <button class="close-modal" id="closeCustomPeriod">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="startDate">Data de Início:</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">Data Final:</label>
+                    <input type="date" id="endDate">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="applyCustomPeriod">Aplicar</button>
+                <button class="btn btn-secondary" id="cancelCustomPeriod">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customReportModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3>⚙️ Configurar Relatório Customizado</h3>
+                <button class="close-modal" id="closeCustomReport">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-config-grid">
+                    <div class="config-section">
+                        <h4>📊 Métricas</h4>
+                        <div class="metrics-list">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="activations" checked>
+                                Total de Ativações
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="water-usage" checked>
+                                Consumo de Água
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="costs">
+                                Estimativa de Custos
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="efficiency">
+                                Taxa de Eficiência
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="schedules">
+                                Agendamentos
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="config-section">
+                        <h4>📅 Período</h4>
+                        <select id="reportPeriod">
+                            <option value="last-week">Última Semana</option>
+                            <option value="last-month">Último Mês</option>
+                            <option value="last-3-months">Últimos 3 Meses</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+                    
+                    <div class="config-section">
+                        <h4>📈 Gráficos</h4>
+                        <div class="charts-list">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="line-chart" checked>
+                                Gráfico de Linha
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="bar-chart" checked>
+                                Gráfico de Barras
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="pie-chart">
+                                Gráfico de Pizza
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="generateCustomReport">📄 Gerar Relatório</button>
+                <button class="btn btn-secondary" id="cancelCustomReport">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal-content extra-large">
+            <div class="modal-header">
+                <h3 id="reportTitle">📄 Relatório</h3>
+                <div class="report-actions">
+                    <button class="btn btn-small" id="printReport">🖨️ Imprimir</button>
+                    <button class="btn btn-small" id="downloadPDF">📄 PDF</button>
+                    <button class="close-modal" id="closeReport">×</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="reportContent">
+                    <!-- Conteúdo do relatório será gerado aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Chart.js para os gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Container de Notificações -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Script principal -->
+   
+
+</body>
+</html>

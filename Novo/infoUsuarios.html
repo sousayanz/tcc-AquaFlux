@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <noscript>
+     <style>
+     body { display: none; }
+     </style>
+     <meta http-equiv="refresh" content="0;url=/index.html">
+    </noscript>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlux - Informações do Usuário</title>
+    <link rel="stylesheet" href="css/user-info.css">
+    <link rel="icon" type="image/x-icon" href="img/logo.ico">
+</head>
+<body>
+    <!-- Header com navegação -->
+    <header class="page-header">
+        <div class="header-content">
+            <div class="nav-section">
+                <button class="back-btn" id="backBtn">
+                    <span>←</span> Voltar ao Dashboard
+                </button>
+                <h1> Informações do Usuário</h1>
+            </div>
+            <div class="user-info">
+                <span id="headerUserName">Usuário</span>
+                <button class="logout-btn" id="logoutBtn">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Seção do Perfil -->
+        <section class="profile-section">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <div class="avatar-circle" id="avatarCircle">U</div>
+                    <button class="change-avatar-btn" id="changeAvatarBtn">📷</button>
+                </div>
+                <div class="profile-status">
+                    <h2 id="profileName">Nome do Usuário</h2>
+                    <span class="status-badge active">Conta Ativa</span>
+                    <p class="member-since">Membro desde: <span id="memberSince">Janeiro 2024</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Dados Pessoais -->
+        <section class="personal-data-section">
+            <div class="section-header">
+                <h2>📝 Dados Pessoais</h2>
+                <button class="edit-section-btn" id="editBasicInfoBtn">✏️ Editar</button>
+            </div>
+            <div class="data-grid">
+                <div class="data-card">
+                    <h3>Informações Básicas</h3>
+                    <div class="editable-form" id="basicInfoForm">
+                        <div class="form-group">
+                            <label for="fullName">Nome Completo:</label>
+                            <input type="text" id="fullName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="displayName">Nome de Exibição:</label>
+                            <input type="text" id="displayName" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="birthDate">Data de Nascimento:</label>
+                            <input type="date" id="birthDate" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gênero:</label>
+                            <select id="gender" disabled>
+                                <option value="">Não informado</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                                <option value="O">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="save-changes-btn" id="saveBasicInfo" >
+                        💾 Salvar Alterações
+                    </button>
+                </div>
+
+                <div class="data-card">
+                    <h3>Informações de Contato <span class="protected-info">🔒</span></h3>
+                    <div class="protected-fields">
+                        <div class="form-group protected">
+                            <label for="email">E-mail:</label>
+                            <input type="email" id="email" readonly>
+                            <span class="protection-note">Para alterar, entre em contato com o suporte</span>
+                        </div>
+                        <div class="form-group protected">
+                            <label for="phone">Telefone:</label>
+                            <input type="tel" id="phone" readonly>
+                            <span class="protection-note">Para alterar, entre em contato com o suporte</span>
+                        </div>
+                        <div class="form-group protected">
+                            <label for="document">CPF/CNPJ:</label>
+                            <input type="text" id="document" readonly>
+                            <span class="protection-note">Para alterar, entre em contato com o suporte</span>
+                        </div>
+                    </div>
+                    <button class="contact-support-btn" id="contactSupportBtn">
+                        📞 Entrar em Contato com Suporte
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Endereço -->
+        <section class="address-section">
+            <h2>🏠 Endereço</h2>
+            <div class="address-card">
+                <div class="editable-form" id="addressForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="zipCode">CEP:</label>
+                            <input type="text" id="zipCode" maxlength="9">
+                            <button class="cep-lookup-btn" id="cepLookupBtn">🔍</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="street">Rua/Avenida:</label>
+                            <input type="text" id="street">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group small">
+                            <label for="number">Número:</label>
+                            <input type="text" id="number" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="complement">Complemento:</label>
+                            <input type="text" id="complement" placeholder="Apto, Bloco, etc." maxlength="10">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="neighborhood">Bairro:</label>
+                            <input type="text" id="neighborhood" maxlength="30">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">Cidade:</label>
+                            <input type="text" id="city" maxlength="30">
+                        </div>
+                        <div class="form-group small">
+                            <label for="state">Estado:</label>
+                            <select id="state">
+                                <option value="">Selecione</option>
+                                <option value="AC">AC</option>
+                                <option value="AL">AL</option>
+                                <option value="AP">AP</option>
+                                <option value="AM">AM</option>
+                                <option value="BA">BA</option>
+                                <option value="CE">CE</option>
+                                <option value="DF">DF</option>
+                                <option value="ES">ES</option>
+                                <option value="GO">GO</option>
+                                <option value="MA">MA</option>
+                                <option value="MT">MT</option>
+                                <option value="MS">MS</option>
+                                <option value="MG">MG</option>
+                                <option value="PA">PA</option>
+                                <option value="PB">PB</option>
+                                <option value="PR">PR</option>
+                                <option value="PE">PE</option>
+                                <option value="PI">PI</option>
+                                <option value="RJ">RJ</option>
+                                <option value="RN">RN</option>
+                                <option value="RS">RS</option>
+                                <option value="RO">RO</option>
+                                <option value="RR">RR</option>
+                                <option value="SC">SC</option>
+                                <option value="SP">SP</option>
+                                <option value="SE">SE</option>
+                                <option value="TO">TO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button class="save-changes-btn" id="saveAddressBtn">
+                    💾 Salvar Endereço
+                </button>
+            </div>
+        </section>
+
+        <!-- Seção de Preferências -->
+        <section class="preferences-section">
+            <h2>⚙️ Preferências do Sistema</h2>
+            <div class="preferences-grid">
+                <div class="preference-card">
+                    <h3>Notificações</h3>
+                    <div class="preference-item">
+                        <label class="switch-label">
+                            <input type="checkbox" id="emailNotifications" checked>
+                            <span class="switch-slider"></span>
+                            Notificações por E-mail
+                        </label>
+                    </div>
+                    <div class="preference-item">
+                        <label class="switch-label">
+                            <input type="checkbox" id="smsNotifications">
+                            <span class="switch-slider"></span>
+                            Notificações por SMS
+                        </label>
+                    </div>
+                    <div class="preference-item">
+                        <label class="switch-label">
+                            <input type="checkbox" id="systemAlerts" checked>
+                            <span class="switch-slider"></span>
+                            Alertas do Sistema
+                        </label>
+                    </div>
+                </div>
+
+                <div class="preference-card">
+                    <h3>Segurança</h3>
+                    <div class="preference-item">
+                        <button class="security-btn" id="changePasswordBtn">
+                            🔑 Alterar Senha
+                        </button>
+                    </div>
+                    <div class="preference-item">
+                        <button class="security-btn danger" id="deleteAccountBtn">
+                            🗑️ Excluir Conta
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button class="save-preferences-btn" id="savePreferencesBtn">
+                💾 Salvar Preferências
+            </button>
+        </section>
+
+        <!-- Seção de Atividade da Conta -->
+        <section class="activity-section">
+            <h2>📊 Atividade da Conta</h2>
+            <div class="activity-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalLogins">0</div>
+                    <div class="stat-label">Total de Logins</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="lastLogin">Nunca</div>
+                    <div class="stat-label">Último Login</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="accountAge">0 dias</div>
+                    <div class="stat-label">Tempo de Conta</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para Alteração de Senha -->
+    <div class="modal-overlay" id="passwordModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔑 Alterar Senha</h3>
+                <button class="close-modal" id="closePasswordModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="currentPassword">Senha Atual:</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Nova Senha:</label>
+                    <input type="password" id="newPassword" required>
+                    <div class="password-strength" id="passwordStrength"></div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Nova Senha:</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="savePasswordBtn">Alterar Senha</button>
+                <button class="btn btn-secondary" id="cancelPasswordBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Contato com Suporte -->
+    <div class="modal-overlay" id="supportModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📞 Contato com Suporte</h3>
+                <button class="close-modal" id="closeSupportModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="support-info">
+                    <div class="support-item">
+                        <strong>📧 E-mail:</strong>
+                        <span>suporte@aquaflux.com</span>
+                    </div>
+                    <div class="support-item">
+                        <strong>📱 WhatsApp:</strong>
+                        <span>(11) 9999-9999</span>
+                    </div>
+                    <div class="support-item">
+                        <strong>⏰ Horário:</strong>
+                        <span>Segunda a Sexta, 8h às 18h</span>
+                    </div>
+                </div>
+                <div class="support-form">
+                    <h4>Ou envie uma mensagem:</h4>
+                    <div class="form-group">
+                        <label for="supportSubject">Assunto:</label>
+                        <select id="supportSubject">
+                            <option value="data-change">Alteração de Dados Pessoais</option>
+                            <option value="account-issue">Problema na Conta</option>
+                            <option value="technical">Suporte Técnico</option>
+                            <option value="billing">Questões Financeiras</option>
+                            <option value="other">Outros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="supportMessage">Mensagem:</label>
+                        <textarea id="supportMessage" rows="4" placeholder="Descreva sua solicitação..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="sendSupportBtn">Enviar Mensagem</button>
+                <button class="btn btn-secondary" id="cancelSupportBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module" src="javascript/infouser.js"></script>
+</body>
+</html>
